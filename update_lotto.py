@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import json
 import re
-import subprocess
 import sys
 import urllib.request
 from datetime import datetime, timedelta
@@ -90,19 +89,6 @@ def main():
 
     HTML.write_text(text, encoding="utf-8")
     print(f"updated to {total} (+{len(new_rows)} rounds)")
-
-    repo_dir = HTML.parent
-    msg = f"data: {total}회 갱신 (+{len(new_rows)})"
-    for cmd in (
-        ["git", "add", "index.html"],
-        ["git", "commit", "-m", msg],
-        ["git", "push"],
-    ):
-        r = subprocess.run(cmd, cwd=repo_dir, capture_output=True, text=True)
-        if r.returncode != 0:
-            print(f"git {cmd[1]} failed: {r.stderr.strip()}", file=sys.stderr)
-            return
-    print("pushed to origin")
 
 
 if __name__ == "__main__":
