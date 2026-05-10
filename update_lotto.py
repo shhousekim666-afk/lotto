@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json
+import html
 import re
 import sys
 import urllib.request
@@ -7,23 +7,37 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 HTML = Path(__file__).parent / "index.html"
-API = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo={n}"
-HEADERS = {"User-Agent": "Mozilla/5.0"}
-TIMEOUT = 15
+NAMU_URL = "https://namu.wiki/w/%EB%A1%9C%EB%98%90%206/45/%EB%8B%B9%EC%B2%A8%EB%B2%88%ED%98%B8/2020%EB%85%84%EB%8C%80"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+TIMEOUT = 30
+ROUND_PATTERN = re.compile(
+    r'\|(\d{3,4})\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})\|(20\d{2})년\|\s*\|(\d{1,2})월\s*(\d{1,2})일\|'
+)
 
 
-def fetch(n: int):
-    req = urllib.request.Request(API.format(n=n), headers=HEADERS)
+def fetch_namu_rounds() -> dict:
+    req = urllib.request.Request(NAMU_URL, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        data = json.loads(r.read().decode("utf-8"))
-    if data.get("returnValue") != "success":
-        return None
-    return {
-        "no": data["drwNo"],
-        "date": data["drwNoDate"],
-        "nums": [data[f"drwtNo{i}"] for i in range(1, 7)],
-        "bonus": data["bnusNo"],
-    }
+        text = r.read().decode("utf-8")
+    clean = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL)
+    clean = re.sub(r'<[^>]+>', '|', clean)
+    clean = html.unescape(clean)
+    clean = re.sub(r'\|+', '|', clean)
+    clean = re.sub(r'\s+', ' ', clean)
+    rounds = {}
+    for m in ROUND_PATTERN.finditer(clean):
+        rnd = int(m.group(1))
+        nums = [int(m.group(i)) for i in range(2, 9)]
+        yr, mo, dy = int(m.group(9)), int(m.group(10)), int(m.group(11))
+        if not all(1 <= n <= 45 for n in nums):
+            continue
+        rounds[rnd] = {
+            "no": rnd,
+            "date": f"{yr}-{mo:02d}-{dy:02d}",
+            "nums": sorted(nums[:6]),
+            "bonus": nums[6],
+        }
+    return rounds
 
 
 def next_saturday(after: str) -> str:
@@ -33,30 +47,21 @@ def next_saturday(after: str) -> str:
 
 def main():
     text = HTML.read_text(encoding="utf-8")
-
     raw_match = re.search(r"const RAW\s*=\s*\[(.*?)\];", text, flags=re.DOTALL)
     if not raw_match:
         print("RAW array not found", file=sys.stderr)
         sys.exit(1)
-
     last_round = max(int(m.group(1)) for m in re.finditer(r"\[(\d+),", raw_match.group(1)))
     print(f"current latest: {last_round}")
 
-    new_rows = []
-    n = last_round + 1
-    while True:
-        try:
-            row = fetch(n)
-        except Exception as e:
-            print(f"fetch {n} failed: {e}", file=sys.stderr)
-            break
-        if row is None:
-            print(f"round {n} not yet drawn")
-            break
-        print(f"fetched {n}: {row['date']} {row['nums']}+{row['bonus']}")
-        new_rows.append(row)
-        n += 1
+    try:
+        namu = fetch_namu_rounds()
+    except Exception as e:
+        print(f"namu fetch failed: {e}", file=sys.stderr)
+        sys.exit(1)
+    print(f"namu rounds: {min(namu)}~{max(namu)} ({len(namu)} entries)")
 
+    new_rows = [namu[r] for r in sorted(namu) if r > last_round]
     if not new_rows:
         print("nothing to update")
         return
@@ -88,7 +93,8 @@ def main():
     text = re.sub(r"desc:'\d{1,3}(?:,\d{3})*회 경험적", f"desc:'{pretty}회 경험적", text)
 
     HTML.write_text(text, encoding="utf-8")
-    print(f"updated to {total} (+{len(new_rows)} rounds)")
+    added = ", ".join(str(r["no"]) for r in new_rows)
+    print(f"updated to {total} (+{len(new_rows)} rounds: {added})")
 
 
 if __name__ == "__main__":
