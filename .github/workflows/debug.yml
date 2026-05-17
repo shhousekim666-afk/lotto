@@ -1,35 +1,33 @@
-name: Debug Proxy
+name: Debug Jina
 on:
   workflow_dispatch:
 jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - name: Test proxy services
+      - name: Inspect jina reader
         run: |
-          UA='Mozilla/5.0'
           TARGET='https://namu.wiki/w/%EB%A1%9C%EB%98%90%206/45/%EB%8B%B9%EC%B2%A8%EB%B2%88%ED%98%B8/2020%EB%85%84%EB%8C%80'
-          TARGET_ENC=$(printf '%s' "$TARGET" | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read(), safe=''))")
 
-          echo "=== 1) allorigins.win get ==="
-          curl -sL -A "$UA" --max-time 30 "https://api.allorigins.win/raw?url=$TARGET_ENC" -o /tmp/a.html
-          wc -c /tmp/a.html
-          grep -oE '1223|1224|2026-05' /tmp/a.html | head -5
+          echo "=== 1) jina default ==="
+          curl -sL --max-time 60 "https://r.jina.ai/$TARGET" -o /tmp/c1.txt
+          wc -c /tmp/c1.txt
+          head -c 1000 /tmp/c1.txt
+          echo
+          echo "..."
+          tail -c 500 /tmp/c1.txt
+          echo
+          echo "=== 2) jina with X-Return-Format ==="
+          curl -sL --max-time 60 -H "X-Return-Format: html" "https://r.jina.ai/$TARGET" -o /tmp/c2.txt
+          wc -c /tmp/c2.txt
+          grep -oE '1223|1224|2026-05|2026\.05' /tmp/c2.txt | head -5
 
-          echo "=== 2) corsproxy.io ==="
-          curl -sL -A "$UA" --max-time 30 "https://corsproxy.io/?$TARGET_ENC" -o /tmp/b.html
-          wc -c /tmp/b.html
-          grep -oE '1223|1224|2026-05' /tmp/b.html | head -5
+          echo "=== 3) jina with engine browser ==="
+          curl -sL --max-time 60 -H "X-Engine: browser" "https://r.jina.ai/$TARGET" -o /tmp/c3.txt
+          wc -c /tmp/c3.txt
+          grep -oE '1223|1224|2026' /tmp/c3.txt | head -5
 
-          echo "=== 3) jina reader (r.jina.ai) ==="
-          curl -sL -A "$UA" --max-time 30 "https://r.jina.ai/$TARGET" -o /tmp/c.txt
-          wc -c /tmp/c.txt
-          grep -oE '1223|1224|2026.05' /tmp/c.txt | head -5
-
-          echo "=== 4) google cache (deprecated) ==="
-          curl -sI -A "$UA" --max-time 15 "https://webcache.googleusercontent.com/search?q=cache:$TARGET" | head -3
-
-          echo "=== 5) crossorigin.me alternative ==="
-          curl -sL -A "$UA" --max-time 30 "https://cors-anywhere.herokuapp.com/$TARGET" -o /tmp/d.html
-          wc -c /tmp/d.html
-          head -c 200 /tmp/d.html
+          echo "=== 4) jina POST ==="
+          curl -sL --max-time 60 -X POST "https://r.jina.ai/" -H "Content-Type: application/json" -d "{\"url\":\"$TARGET\"}" -o /tmp/c4.txt
+          wc -c /tmp/c4.txt
+          head -c 500 /tmp/c4.txt
