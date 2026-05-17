@@ -1,44 +1,35 @@
-name: Debug Sources
+name: Debug Proxy
 on:
   workflow_dispatch:
 jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - name: Test sources
+      - name: Test proxy services
         run: |
-          UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          UA='Mozilla/5.0'
+          TARGET='https://namu.wiki/w/%EB%A1%9C%EB%98%90%206/45/%EB%8B%B9%EC%B2%A8%EB%B2%88%ED%98%B8/2020%EB%85%84%EB%8C%80'
+          TARGET_ENC=$(printf '%s' "$TARGET" | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read(), safe=''))")
 
-          echo "=== 1) dhlottery with Referer ==="
-          curl -sI -A "$UA" \
-            -H "Referer: https://www.dhlottery.co.kr/" \
-            -H "Accept-Language: ko-KR" \
-            --max-time 15 \
-            "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=1224" | head -5
+          echo "=== 1) allorigins.win get ==="
+          curl -sL -A "$UA" --max-time 30 "https://api.allorigins.win/raw?url=$TARGET_ENC" -o /tmp/a.html
+          wc -c /tmp/a.html
+          grep -oE '1223|1224|2026-05' /tmp/a.html | head -5
 
-          echo "=== 2) dhlottery 모바일 ==="
-          curl -sI -A "$UA" --max-time 15 "https://m.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=1224" | head -5
+          echo "=== 2) corsproxy.io ==="
+          curl -sL -A "$UA" --max-time 30 "https://corsproxy.io/?$TARGET_ENC" -o /tmp/b.html
+          wc -c /tmp/b.html
+          grep -oE '1223|1224|2026-05' /tmp/b.html | head -5
 
-          echo "=== 3) Wikipedia 로또 6/45 page body ==="
-          curl -sL -A "$UA" --max-time 15 "https://ko.wikipedia.org/wiki/%EB%A1%9C%EB%98%906/45" -o /tmp/wiki.html
-          wc -c /tmp/wiki.html
-          grep -oE '12[12][0-9]회|2026-0[45]-[0-9]+|1224|1223' /tmp/wiki.html | head -10
+          echo "=== 3) jina reader (r.jina.ai) ==="
+          curl -sL -A "$UA" --max-time 30 "https://r.jina.ai/$TARGET" -o /tmp/c.txt
+          wc -c /tmp/c.txt
+          grep -oE '1223|1224|2026.05' /tmp/c.txt | head -5
 
-          echo "=== 4) Community GitHub - 로또 데이터 검색 ==="
-          curl -sL --max-time 15 -A "$UA" "https://api.github.com/search/repositories?q=lotto+korea+data&sort=updated" | grep -oE '"full_name":"[^"]+"' | head -10
+          echo "=== 4) google cache (deprecated) ==="
+          curl -sI -A "$UA" --max-time 15 "https://webcache.googleusercontent.com/search?q=cache:$TARGET" | head -3
 
-          echo "=== 5) gh raw csv 1 (예시) ==="
-          curl -sI -A "$UA" --max-time 10 "https://raw.githubusercontent.com/codeleopard/Lotto/main/lotto_data.csv" | head -3
-          curl -sI -A "$UA" --max-time 10 "https://raw.githubusercontent.com/roboreport/lotto-data/main/data.json" | head -3
-
-          echo "=== 6) Daum/Naver 검색 (lotto winning numbers 1224) ==="
-          curl -sI -A "$UA" --max-time 10 "https://search.naver.com/search.naver?query=%EB%A1%9C%EB%98%901224%ED%9A%8C" | head -5
-
-          echo "=== 7) lotto.go.kr ==="
-          curl -sI -A "$UA" --max-time 10 "https://lotto.go.kr/" | head -5 || true
-
-          echo "=== 8) namu.wiki via different path ==="
-          curl -sI -A "$UA" --max-time 10 "https://namu.wiki/api/v1/document/%EB%A1%9C%EB%98%90%206/45/%EB%8B%B9%EC%B2%A8%EB%B2%88%ED%98%B8/2020%EB%85%84%EB%8C%80" | head -3
-
-          echo "=== 9) dhlottery 비번호 분포 ==="
-          curl -sIL -A "$UA" --max-time 15 "https://www.dhlottery.co.kr/gameResult.do?method=byWin&drwNo=1224" | head -10
+          echo "=== 5) crossorigin.me alternative ==="
+          curl -sL -A "$UA" --max-time 30 "https://cors-anywhere.herokuapp.com/$TARGET" -o /tmp/d.html
+          wc -c /tmp/d.html
+          head -c 200 /tmp/d.html
