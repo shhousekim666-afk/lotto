@@ -1,13 +1,18 @@
-name: Update Lotto Data
+name: Add Lotto Round (manual)
 
 on:
-  workflow_dispatch:  # namu.wiki 차단 해제 시 수동 시도용. 자동 schedule 비활성.
+  workflow_dispatch:
+    inputs:
+      data:
+        description: "회차,YYYY-MM-DD,n1,n2,n3,n4,n5,n6,보너스 (예: 1225,2026-05-23,1,2,3,4,5,6,7)"
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 jobs:
-  update:
+  add:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,16 +21,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run update script
-        run: python update_lotto.py
+      - name: Add round
+        run: python add_round.py "${{ inputs.data }}"
 
-      - name: Commit and push if changed
+      - name: Commit and push
         run: |
           if [[ -n "$(git status --porcelain index.html)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html
-            git commit -m "data: 로또 데이터 자동 갱신"
+            git commit -m "data: ${{ inputs.data }} 수동 추가"
             git push
           else
             echo "변경 없음"
