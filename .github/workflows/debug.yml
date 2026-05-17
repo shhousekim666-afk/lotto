@@ -1,0 +1,32 @@
+name: Debug Sources
+on:
+  workflow_dispatch:
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test multiple sources
+        run: |
+          UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+
+          echo "=== 1) namu.wiki (browser headers) ==="
+          curl -sI -A "$UA" \
+            -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+            -H "Accept-Language: ko-KR,ko;q=0.9,en;q=0.8" \
+            --max-time 15 \
+            "https://namu.wiki/w/%EB%A1%9C%EB%98%90%206/45/%EB%8B%B9%EC%B2%A8%EB%B2%88%ED%98%B8/2020%EB%85%84%EB%8C%80" | head -10
+
+          echo "=== 2) dhlottery HTML 결과 페이지 ==="
+          curl -sI -A "$UA" --max-time 15 "https://www.dhlottery.co.kr/gameResult.do?method=byWin&drwNo=1224" | head -10
+
+          echo "=== 3) dhlottery HTML 결과 body ==="
+          curl -sL -A "$UA" --max-time 15 "https://www.dhlottery.co.kr/gameResult.do?method=byWin&drwNo=1224" | grep -oE 'drwNo[0-9]+|win_result|ball_645|당첨번호' | head -20
+
+          echo "=== 4) lottoapi.eopla.net ==="
+          curl -sI --max-time 10 "https://lottoapi.eopla.net/api/v1/numbers/latest" | head -5 || true
+
+          echo "=== 5) lottokorea API 시도 ==="
+          curl -sI --max-time 10 "https://www.nlotto.co.kr/common.do?method=getLottoNumber&drwNo=1224" | head -5 || true
+
+          echo "=== 6) 위키백과 ==="
+          curl -sI -A "$UA" --max-time 10 "https://ko.wikipedia.org/wiki/%EB%A1%9C%EB%98%906/45" | head -5 || true
