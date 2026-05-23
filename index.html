@@ -125,6 +125,27 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 .rno{font-family:'Oxanium',monospace;color:var(--gold);font-weight:600;font-size:12px}
 .rdate{font-family:'Oxanium',monospace;color:var(--text3);font-size:11px}
 .disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;border:1px solid rgba(248,113,113,.12);background:rgba(248,113,113,.03);border-radius:10px;padding:11px 15px;line-height:1.65}
+.a-backtest{margin-top:10px;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;font-size:10px;font-family:'Oxanium',monospace;display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--text3)}
+.a-backtest .bt-k{color:var(--text3)}
+.a-backtest .bt-v{color:var(--text);font-weight:600}
+.a-backtest .bt-rank{padding:2px 7px;border-radius:99px;background:var(--gold-dim);color:var(--gold-lt);border:1px solid rgba(212,168,67,.25);font-weight:700}
+.bt-hd{font-family:'Oxanium',monospace;font-size:11px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1rem}
+.bt-card{background:var(--bg1);border:1px solid var(--line);border-radius:18px;padding:1.5rem;margin-bottom:1.5rem}
+.bt-meta{font-size:11px;color:var(--text3);margin-bottom:1.2rem;line-height:1.7}
+.bt-meta b{color:var(--text);font-weight:600}
+.bt-table{width:100%;border-collapse:collapse;font-size:12px}
+.bt-table th,.bt-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right}
+.bt-table th:first-child,.bt-table td:first-child{text-align:left}
+.bt-table th{font-family:'Oxanium',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);font-weight:400}
+.bt-table tr:last-child td{border-bottom:none}
+.bt-table tr:hover td{background:rgba(255,255,255,.02)}
+.bt-table .num{font-family:'Oxanium',monospace}
+.bt-table .pos{color:var(--green)}
+.bt-table .neg{color:var(--red)}
+.bt-table .rank1{color:var(--gold-lt);font-weight:700}
+.bt-honest{margin-top:1.5rem;padding:14px 18px;border-radius:12px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.05);font-size:12px;line-height:1.7;color:var(--text2)}
+.bt-honest b{color:var(--blue);font-weight:600}
+.bt-loading{padding:2rem;text-align:center;color:var(--text3);font-size:12px}
 @keyframes ballDrop{0%{opacity:0;transform:scale(.4) translateY(-14px)}70%{transform:scale(1.05) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}
 .ball-anim{animation:ballDrop .38s cubic-bezier(.34,1.56,.64,1) both}
 @media(max-width:900px){.algo-grid{grid-template-columns:repeat(2,1fr)}.mini-stats{grid-template-columns:repeat(2,1fr)}.ensemble-inner{flex-wrap:wrap;gap:1.2rem}.ensemble-ghost{display:none}}
@@ -157,6 +178,7 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
   <div class="tabs">
     <div class="tab on" onclick="gotoTab('home',this)">이론별 추천 번호</div>
     <div class="tab" onclick="gotoTab('stats',this)">번호 통계</div>
+    <div class="tab" onclick="gotoTab('backtest',this)">백테스트 결과</div>
     <div class="tab" onclick="gotoTab('recent',this)">최근 당첨</div>
   </div>
   <div class="pane on" id="pane-home">
@@ -197,6 +219,22 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
     <div class="hc-grid">
       <div class="hc-card"><div class="hc-title" style="color:var(--teal)">🔥 핫 넘버 TOP 10</div><div id="hotList"></div></div>
       <div class="hc-card"><div class="hc-title" style="color:var(--blue)">❄️ 콜드 넘버 TOP 10</div><div id="coldList"></div></div>
+    </div>
+  </div>
+  <div class="pane" id="pane-backtest">
+    <div class="bt-card">
+      <div class="sec-hd" style="margin-bottom:1rem">
+        <div class="sec-hd-lbl">walk-forward 백테스트 결과</div><div class="sec-hd-line"></div>
+      </div>
+      <div class="bt-meta" id="btMeta"></div>
+      <div id="btTableWrap">
+        <div class="bt-loading">백테스트 결과 로딩 중...</div>
+      </div>
+      <div class="bt-honest">
+        <b>해석 안내</b> · 평균 hit은 6개 알고리즘 모두 무작위 기대값(0.800)과 통계적으로 구별되지 않습니다.
+        BSS 유의성(✓)은 rand 알고리즘의 100회 반복 평균이 평균확률 baseline에 더 가까워졌다는 통계적 특성이지
+        실제 예측력 우위가 아닙니다. 로또는 IID(독립 균등 시행)이며 과거 데이터로 미래 추첨을 예측할 수학적 근거는 없습니다.
+      </div>
     </div>
   </div>
   <div class="pane" id="pane-recent">
@@ -501,6 +539,7 @@ function buildGrid(){
         ${Array(6).fill('<div class="ball ghost"></div>').join('')}
       </div>
       <div class="ball-meta" id="bm-${a.id}"></div>
+      <div class="a-backtest" id="abt-${a.id}" style="display:none"></div>
       <button class="btn-regen" onclick="regenOne('${a.id}')">↻ 다시 생성</button>
     `;
     grid.appendChild(card);
@@ -577,7 +616,71 @@ function gotoTab(name,el){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
   document.getElementById('pane-'+name).classList.add('on');
 }
-buildGrid(); initStats(); setTimeout(regenAll,80);
+// ━━━ 백테스트 결과 로드 (정적 사전계산 JSON) ━━━
+async function loadBacktest(){
+  try{
+    const r = await fetch('backtest/backtest-summary.json',{cache:'no-cache'});
+    if(!r.ok) throw new Error('summary 없음');
+    const data = await r.json();
+    renderBacktestBadges(data);
+    renderBacktestTab(data);
+  }catch(e){
+    const w = document.getElementById('btTableWrap');
+    if(w) w.innerHTML = `<div class="bt-loading">백테스트 결과 파일을 로드할 수 없습니다 (${e.message}).</div>`;
+  }
+}
+function renderBacktestBadges(data){
+  for(const a of ALGOS){
+    const s = data.algos[a.id]; if(!s) continue;
+    const el = document.getElementById('abt-'+a.id); if(!el) continue;
+    el.style.display = 'flex';
+    el.innerHTML = `
+      <span class="bt-k">평균 hit</span>
+      <span class="bt-v">${s.hitMean.toFixed(3)}</span>
+      <span class="bt-k">BSS</span>
+      <span class="bt-v">${s.bss.toFixed(3)}</span>
+      <span class="bt-rank">#${s.rankByBSS}</span>
+    `;
+  }
+}
+function renderBacktestTab(data){
+  const m = data.meta;
+  document.getElementById('btMeta').innerHTML = `
+    평가 회차: <b>${m.evalStart}~${m.evalEnd}회</b> (총 ${m.evalEnd-m.evalStart+1}회) ·
+    rand 반복: <b>${m.randRuns}</b> · monte 시뮬: <b>${m.monteSims.toLocaleString()}</b> ·
+    실행 시간: <b>${(m.elapsedSec/60).toFixed(1)}분</b><br>
+    생성: ${new Date(m.generatedAt).toLocaleString('ko-KR')}
+  `;
+  const algos = ALGOS.map(a=>data.algos[a.id]).filter(Boolean).sort((a,b)=>a.rankByBSS-b.rankByBSS);
+  const refHit = (6*6/45).toFixed(3);
+  const rows = algos.map(s=>{
+    const rankCls = s.rankByBSS===1?'rank1':'';
+    const hitDelta = s.hitMean - 6*6/45;
+    const hitCls = hitDelta>0?'pos':hitDelta<0?'neg':'';
+    const sig = s.isSignificant?'<span class="pos">✓</span>':'·';
+    return `<tr>
+      <td><span class="${rankCls}">#${s.rankByBSS}</span> ${s.name}</td>
+      <td class="num ${hitCls}">${s.hitMean.toFixed(3)}</td>
+      <td class="num">${s.hitStd.toFixed(3)}</td>
+      <td class="num">${s.bss.toFixed(3)}</td>
+      <td class="num">[${s.bssCI[0].toFixed(2)}, ${s.bssCI[1].toFixed(2)}]</td>
+      <td class="num">${s.pValueBonferroni.toFixed(3)}</td>
+      <td>${sig}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('btTableWrap').innerHTML = `
+    <table class="bt-table">
+      <thead><tr>
+        <th>알고리즘</th><th>평균 hit</th><th>표준편차</th><th>BSS</th><th>BSS 95% CI</th><th>p (Bonf)</th><th>유의</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="bt-meta" style="margin-top:1rem;font-size:10.5px">
+      무작위 기대 hit = 6×6/45 = <b>${refHit}</b> · Bonferroni 보정 임계 α' = <b>0.00833</b> · n=10,000 부트스트랩
+    </div>
+  `;
+}
+buildGrid(); initStats(); setTimeout(regenAll,80); loadBacktest();
 </script>
 </body>
 </html>
