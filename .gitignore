@@ -1,2 +1,7 @@
 update_lotto.log
 .DS_Store
+
+# 백테스트 산출물
+backtest/checkpoints/
+backtest/backtest-detail.json
+backtest/sample*.json

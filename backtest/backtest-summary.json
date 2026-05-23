@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "generatedAt": "2026-05-23T16:08:06.986Z",
+    "totalDraws": 1224,
+    "evalStart": 301,
+    "evalEnd": 1224,
+    "step": 1,
+    "randRuns": 100,
+    "monteSims": 10000,
+    "elapsedSec": 4446.38,
+    "detailFile": "backtest-detail.json"
+  },
+  "algos": {
+    "freq": {
+      "algoId": "freq",
+      "name": "빈도 분석",
+      "det": false,
+      "evalRounds": 924,
+      "hitMean": 0.7779,
+      "hitStd": 0.5204,
+      "hitDist": [
+        380,
+        383,
+        135,
+        25,
+        1,
+        0,
+        0
+      ],
+      "meanBS": 0.166327,
+      "meanBSRef": 0.115556,
+      "bss": -0.439371,
+      "bssCI": [
+        -0.452353,
+        -0.426437
+      ],
+      "pValue": 0,
+      "nullSimCount": 10000,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 2
+    },
+    "cooccur": {
+      "algoId": "cooccur",
+      "name": "공출현 행렬",
+      "det": true,
+      "evalRounds": 924,
+      "hitMean": 0.7587,
+      "hitStd": 0.7681,
+      "hitDist": [
+        389,
+        391,
+        122,
+        22,
+        0,
+        0,
+        0
+      ],
+      "meanBS": 0.232949,
+      "meanBSRef": 0.115556,
+      "bss": -1.015901,
+      "bssCI": [
+        -1.034632,
+        -0.996753
+      ],
+      "pValue": 0.9466,
+      "nullSimCount": 10000,
+      "randRuns": 1,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 6
+    },
+    "monte": {
+      "algoId": "monte",
+      "name": "몬테카를로",
+      "det": false,
+      "evalRounds": 924,
+      "hitMean": 0.7748,
+      "hitStd": 0.3963,
+      "hitDist": [
+        389,
+        372,
+        142,
+        21,
+        0,
+        0,
+        0
+      ],
+      "meanBS": 0.147236,
+      "meanBSRef": 0.115556,
+      "bss": -0.274157,
+      "bssCI": [
+        -0.285715,
+        -0.263072
+      ],
+      "pValue": 0,
+      "nullSimCount": 10000,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 1
+    },
+    "delta": {
+      "algoId": "delta",
+      "name": "델타 수열",
+      "det": true,
+      "evalRounds": 924,
+      "hitMean": 0.8258,
+      "hitStd": 0.768,
+      "hitDist": [
+        342,
+        425,
+        134,
+        22,
+        1,
+        0,
+        0
+      ],
+      "meanBS": 0.229966,
+      "meanBSRef": 0.115556,
+      "bss": -0.990093,
+      "bssCI": [
+        -1.009241,
+        -0.971362
+      ],
+      "pValue": 0.1563,
+      "nullSimCount": 10000,
+      "randRuns": 1,
+      "pValueBonferroni": 0.9378,
+      "isSignificant": false,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 4
+    },
+    "genetic": {
+      "algoId": "genetic",
+      "name": "유전 알고리즘",
+      "det": false,
+      "evalRounds": 924,
+      "hitMean": 0.7763,
+      "hitStd": 0.7111,
+      "hitDist": [
+        381,
+        397,
+        129,
+        17,
+        0,
+        0,
+        0
+      ],
+      "meanBS": 0.216445,
+      "meanBSRef": 0.115556,
+      "bss": -0.873086,
+      "bssCI": [
+        -0.892228,
+        -0.853665
+      ],
+      "pValue": 0,
+      "nullSimCount": 10000,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 3
+    },
+    "hotcold": {
+      "algoId": "hotcold",
+      "name": "핫/콜드",
+      "det": true,
+      "evalRounds": 924,
+      "hitMean": 0.8052,
+      "hitStd": 0.7595,
+      "hitDist": [
+        355,
+        413,
+        137,
+        19,
+        0,
+        0,
+        0
+      ],
+      "meanBS": 0.23088,
+      "meanBSRef": 0.115556,
+      "bss": -0.998002,
+      "bssCI": [
+        -1.016733,
+        -0.979687
+      ],
+      "pValue": 0.4248,
+      "nullSimCount": 10000,
+      "randRuns": 1,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 5
+    }
+  }
+}
