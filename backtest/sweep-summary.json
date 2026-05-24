@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "generatedAt": "2026-05-24T00:54:00.124Z",
+    "trainRange": [
+      301,
+      1100
+    ],
+    "holdoutRange": [
+      1101,
+      1224
+    ],
+    "overfitThresholdPct": 10,
+    "elapsedSec": 278.03,
+    "note": "각 조합 회차당 1 run (시드 고정). 알고리즘별 최적은 hold-out 기준. 자동 채택 X, 참고용."
+  },
+  "algos": {
+    "freq": {
+      "name": "빈도 분석",
+      "trials": [
+        {
+          "params": {
+            "topK": 15
+          },
+          "paramKey": "topK=15",
+          "trainMean": 0.7863,
+          "trainStd": 0.7988,
+          "holdoutMean": 0.8548,
+          "holdoutStd": 0.8585,
+          "deltaPct": -8.71,
+          "overfit": false
+        },
+        {
+          "params": {
+            "topK": 10
+          },
+          "paramKey": "topK=10",
+          "trainMean": 0.7688,
+          "trainStd": 0.7923,
+          "holdoutMean": 0.8065,
+          "holdoutStd": 0.7796,
+          "deltaPct": -4.9,
+          "overfit": false
+        },
+        {
+          "params": {
+            "topK": 20
+          },
+          "paramKey": "topK=20",
+          "trainMean": 0.79,
+          "trainStd": 0.7927,
+          "holdoutMean": 0.7419,
+          "holdoutStd": 0.75,
+          "deltaPct": 6.09,
+          "overfit": false
+        },
+        {
+          "params": {
+            "topK": 5
+          },
+          "paramKey": "topK=5",
+          "trainMean": 0.6388,
+          "trainStd": 0.7129,
+          "holdoutMean": 0.6129,
+          "holdoutStd": 0.6805,
+          "deltaPct": 4.05,
+          "overfit": false
+        }
+      ],
+      "best": {
+        "params": {
+          "topK": 15
+        },
+        "paramKey": "topK=15",
+        "trainMean": 0.7863,
+        "trainStd": 0.7988,
+        "holdoutMean": 0.8548,
+        "holdoutStd": 0.8585,
+        "deltaPct": -8.71,
+        "overfit": false
+      },
+      "defaults": {
+        "topK": 12
+      }
+    },
+    "monte": {
+      "name": "몬테카를로",
+      "trials": [
+        {
+          "params": {
+            "sims": 1000
+          },
+          "paramKey": "sims=1000",
+          "trainMean": 0.79,
+          "trainStd": 0.7719,
+          "holdoutMean": 0.9194,
+          "holdoutStd": 0.9123,
+          "deltaPct": -16.38,
+          "overfit": true
+        },
+        {
+          "params": {
+            "sims": 5000
+          },
+          "paramKey": "sims=5000",
+          "trainMean": 0.78,
+          "trainStd": 0.7772,
+          "holdoutMean": 0.7984,
+          "holdoutStd": 0.8229,
+          "deltaPct": -2.36,
+          "overfit": false
+        },
+        {
+          "params": {
+            "sims": 30000
+          },
+          "paramKey": "sims=30000",
+          "trainMean": 0.7725,
+          "trainStd": 0.7604,
+          "holdoutMean": 0.7097,
+          "holdoutStd": 0.7271,
+          "deltaPct": 8.13,
+          "overfit": false
+        },
+        {
+          "params": {
+            "sims": 10000
+          },
+          "paramKey": "sims=10000",
+          "trainMean": 0.79,
+          "trainStd": 0.7911,
+          "holdoutMean": 0.7016,
+          "holdoutStd": 0.7403,
+          "deltaPct": 11.19,
+          "overfit": true
+        }
+      ],
+      "best": {
+        "params": {
+          "sims": 1000
+        },
+        "paramKey": "sims=1000",
+        "trainMean": 0.79,
+        "trainStd": 0.7719,
+        "holdoutMean": 0.9194,
+        "holdoutStd": 0.9123,
+        "deltaPct": -16.38,
+        "overfit": true
+      },
+      "defaults": {
+        "sims": 100000
+      }
+    },
+    "hotcold": {
+      "name": "핫/콜드",
+      "trials": [
+        {
+          "params": {
+            "window": 100
+          },
+          "paramKey": "window=100",
+          "trainMean": 0.7963,
+          "trainStd": 0.763,
+          "holdoutMean": 0.8306,
+          "holdoutStd": 0.7591,
+          "deltaPct": -4.31,
+          "overfit": false
+        },
+        {
+          "params": {
+            "window": 50
+          },
+          "paramKey": "window=50",
+          "trainMean": 0.8087,
+          "trainStd": 0.7597,
+          "holdoutMean": 0.7823,
+          "holdoutStd": 0.7573,
+          "deltaPct": 3.26,
+          "overfit": false
+        },
+        {
+          "params": {
+            "window": 20
+          },
+          "paramKey": "window=20",
+          "trainMean": 0.795,
+          "trainStd": 0.7861,
+          "holdoutMean": 0.7661,
+          "holdoutStd": 0.7083,
+          "deltaPct": 3.64,
+          "overfit": false
+        },
+        {
+          "params": {
+            "window": 10
+          },
+          "paramKey": "window=10",
+          "trainMean": 0.8313,
+          "trainStd": 0.7892,
+          "holdoutMean": 0.7258,
+          "holdoutStd": 0.8066,
+          "deltaPct": 12.69,
+          "overfit": true
+        },
+        {
+          "params": {
+            "window": 30
+          },
+          "paramKey": "window=30",
+          "trainMean": 0.8113,
+          "trainStd": 0.775,
+          "holdoutMean": 0.7177,
+          "holdoutStd": 0.6905,
+          "deltaPct": 11.54,
+          "overfit": true
+        }
+      ],
+      "best": {
+        "params": {
+          "window": 100
+        },
+        "paramKey": "window=100",
+        "trainMean": 0.7963,
+        "trainStd": 0.763,
+        "holdoutMean": 0.8306,
+        "holdoutStd": 0.7591,
+        "deltaPct": -4.31,
+        "overfit": false
+      },
+      "defaults": {
+        "window": 50
+      }
+    },
+    "genetic": {
+      "name": "유전 알고리즘",
+      "trials": [
+        {
+          "params": {
+            "gens": 50,
+            "popSize": 200
+          },
+          "paramKey": "gens=50/popSize=200",
+          "trainMean": 0.7625,
+          "trainStd": 0.7574,
+          "holdoutMean": 0.8387,
+          "holdoutStd": 0.7765,
+          "deltaPct": -9.99,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 100,
+            "popSize": 200
+          },
+          "paramKey": "gens=100/popSize=200",
+          "trainMean": 0.7625,
+          "trainStd": 0.7574,
+          "holdoutMean": 0.8387,
+          "holdoutStd": 0.7765,
+          "deltaPct": -9.99,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 200,
+            "popSize": 200
+          },
+          "paramKey": "gens=200/popSize=200",
+          "trainMean": 0.7625,
+          "trainStd": 0.7574,
+          "holdoutMean": 0.8387,
+          "holdoutStd": 0.7765,
+          "deltaPct": -9.99,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 50,
+            "popSize": 50
+          },
+          "paramKey": "gens=50/popSize=50",
+          "trainMean": 0.7887,
+          "trainStd": 0.8165,
+          "holdoutMean": 0.7742,
+          "holdoutStd": 0.6937,
+          "deltaPct": 1.84,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 100,
+            "popSize": 50
+          },
+          "paramKey": "gens=100/popSize=50",
+          "trainMean": 0.7725,
+          "trainStd": 0.7926,
+          "holdoutMean": 0.7661,
+          "holdoutStd": 0.7632,
+          "deltaPct": 0.83,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 200,
+            "popSize": 50
+          },
+          "paramKey": "gens=200/popSize=50",
+          "trainMean": 0.7688,
+          "trainStd": 0.7939,
+          "holdoutMean": 0.7419,
+          "holdoutStd": 0.75,
+          "deltaPct": 3.5,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 100,
+            "popSize": 100
+          },
+          "paramKey": "gens=100/popSize=100",
+          "trainMean": 0.7925,
+          "trainStd": 0.7791,
+          "holdoutMean": 0.7339,
+          "holdoutStd": 0.7196,
+          "deltaPct": 7.39,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 200,
+            "popSize": 100
+          },
+          "paramKey": "gens=200/popSize=100",
+          "trainMean": 0.79,
+          "trainStd": 0.78,
+          "holdoutMean": 0.7339,
+          "holdoutStd": 0.7196,
+          "deltaPct": 7.1,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 50,
+            "popSize": 100
+          },
+          "paramKey": "gens=50/popSize=100",
+          "trainMean": 0.79,
+          "trainStd": 0.7736,
+          "holdoutMean": 0.7177,
+          "holdoutStd": 0.7135,
+          "deltaPct": 9.15,
+          "overfit": false
+        }
+      ],
+      "best": {
+        "params": {
+          "gens": 50,
+          "popSize": 200
+        },
+        "paramKey": "gens=50/popSize=200",
+        "trainMean": 0.7625,
+        "trainStd": 0.7574,
+        "holdoutMean": 0.8387,
+        "holdoutStd": 0.7765,
+        "deltaPct": -9.99,
+        "overfit": false
+      },
+      "defaults": {
+        "gens": 80,
+        "popSize": 120
+      }
+    }
+  }
+}

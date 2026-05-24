@@ -325,6 +325,15 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
         <div class="bt-loading">충실성 데이터 로딩 중...</div>
       </div>
     </div>
+    <div class="bt-card">
+      <div class="sec-hd" style="margin-bottom:1rem">
+        <div class="sec-hd-lbl">하이퍼파라미터 sweep</div><div class="sec-hd-line"></div>
+      </div>
+      <div class="bt-meta" id="btSweepMeta"></div>
+      <div id="btSweepWrap">
+        <div class="bt-loading">sweep 데이터 로딩 중...</div>
+      </div>
+    </div>
   </div>
   <div class="pane" id="pane-recent">
     <div class="recent-card">
@@ -726,6 +735,58 @@ async function loadBacktest(){
     const w = document.getElementById('btFidelityWrap');
     if(w) w.innerHTML = `<div class="bt-loading">충실성 데이터 없음 (${e.message}).</div>`;
   }
+  // sweep 별도 로드
+  try{
+    const r3 = await fetch('backtest/sweep-summary.json',{cache:'no-cache'});
+    if(!r3.ok) throw new Error('sweep 없음');
+    renderSweep(await r3.json());
+  }catch(e){
+    const w = document.getElementById('btSweepWrap');
+    if(w) w.innerHTML = `<div class="bt-loading">sweep 데이터 없음 (${e.message}).</div>`;
+  }
+}
+function renderSweep(data){
+  const m = data.meta;
+  document.getElementById('btSweepMeta').innerHTML = `
+    train: <b>${m.trainRange[0]}~${m.trainRange[1]}회 (${m.trainRange[1]-m.trainRange[0]+1}회)</b> ·
+    hold-out: <b>${m.holdoutRange[0]}~${m.holdoutRange[1]}회 (${m.holdoutRange[1]-m.holdoutRange[0]+1}회)</b> ·
+    overfit 임계 ±${m.overfitThresholdPct}% · 실행 ${(m.elapsedSec/60).toFixed(1)}분<br>
+    <span style="color:var(--red)">⚠ ${m.note}</span>
+  `;
+  let html = '';
+  for(const algoId of Object.keys(data.algos)){
+    const a = data.algos[algoId];
+    const defKey = Object.entries(a.defaults).map(([k,v])=>`${k}=${v}`).join('/');
+    const rows = a.trials.map((t,i)=>{
+      const rankCls = i===0?'rank1':'';
+      const ofCls = t.overfit?'neg':'';
+      const ofIcon = t.overfit?'⚠':'·';
+      return `<tr>
+        <td>${i===0?'<b>★</b> ':''}${t.paramKey}</td>
+        <td class="num">${t.trainMean.toFixed(3)}</td>
+        <td class="num">${t.holdoutMean.toFixed(3)}</td>
+        <td class="num ${ofCls}">${t.deltaPct>=0?'+':''}${t.deltaPct.toFixed(1)}%</td>
+        <td>${ofIcon}</td>
+      </tr>`;
+    }).join('');
+    html += `<div style="margin-top:1.5rem">
+      <div style="font-family:'Oxanium',monospace;font-size:11px;color:var(--text);letter-spacing:1px;margin-bottom:0.5rem">
+        ${a.name} <span style="color:var(--text3);font-weight:400;font-size:10px;margin-left:8px">현재 default: ${defKey}</span>
+      </div>
+      <table class="bt-table">
+        <thead><tr>
+          <th>파라미터</th><th>train hit</th><th>hold-out hit</th><th>Δ%</th><th>overfit</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }
+  html += `<div class="bt-honest" style="margin-top:1.5rem">
+    <b>주의</b> · ★는 hold-out hit이 가장 높은 조합이지만 124회 표본의 우연일 가능성이 높습니다.
+    어떤 알고리즘도 hold-out에서 통계적으로 의미 있는 파라미터 우위가 없습니다 (대부분 ±10% 안팎 IID 노이즈).
+    이 결과는 <b>자동 채택되지 않으며</b> 참고용입니다 — 프로덕션 파라미터 변경은 명시적 검토 후에만.
+  </div>`;
+  document.getElementById('btSweepWrap').innerHTML = html;
 }
 function renderFidelity(data){
   const metricInfo = {

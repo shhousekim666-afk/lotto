@@ -71,16 +71,17 @@ function wSample(weights, rng) {
 }
 
 // ━━━ 알고리즘 1: 빈도 분석 ━━━
-export function algoFreq(ctx, rng) {
+export function algoFreq(ctx, rng, opts = {}) {
   const { freq } = ctx;
-  const top12 = Array.from({ length: 45 }, (_, i) => i + 1)
+  const topK = opts.topK ?? 12;
+  const topN = Array.from({ length: 45 }, (_, i) => i + 1)
     .sort((a, b) => freq[b] - freq[a])
-    .slice(0, 12);
-  const w = top12.map((n) => freq[n] ** 2);
+    .slice(0, topK);
+  const w = topN.map((n) => freq[n] ** 2);
   const chosen = new Set();
   let t = 0;
-  while (chosen.size < 6 && t++ < 400) chosen.add(top12[wSample(w, rng)]);
-  for (const n of top12) {
+  while (chosen.size < 6 && t++ < 400) chosen.add(topN[wSample(w, rng)]);
+  for (const n of topN) {
     if (chosen.size >= 6) break;
     chosen.add(n);
   }
@@ -171,8 +172,11 @@ export function algoDelta(ctx) {
 }
 
 // ━━━ 알고리즘 5: 유전 알고리즘 ━━━
-export function algoGenetic(ctx, rng) {
+export function algoGenetic(ctx, rng, opts = {}) {
   const { freq, totalPicks, avgSum, stdSum, avgOdd, stdOdd } = ctx;
+  const gens = opts.gens ?? 80;
+  const popSize = opts.popSize ?? 120;
+  const eliteSize = Math.max(1, Math.floor(popSize * 0.25));
   const avgF6 = (totalPicks / 45) * 6;
   function fitness(ind) {
     const fs = ind.reduce((a, n) => a + freq[n], 0);
@@ -202,12 +206,12 @@ export function algoGenetic(ctx, rng) {
     n[(rng() * 6) | 0] = v;
     return n;
   };
-  let pop = Array.from({ length: 120 }, rndInd);
-  for (let g = 0; g < 80; g++) {
+  let pop = Array.from({ length: popSize }, rndInd);
+  for (let g = 0; g < gens; g++) {
     pop.sort((a, b) => fitness(b) - fitness(a));
-    const top = pop.slice(0, 30);
+    const top = pop.slice(0, eliteSize);
     const next = [...top];
-    while (next.length < 120) {
+    while (next.length < popSize) {
       let c = cross(top[(rng() * top.length) | 0], top[(rng() * top.length) | 0]);
       if (rng() < 0.15) c = mutate(c);
       next.push(c);
@@ -218,9 +222,10 @@ export function algoGenetic(ctx, rng) {
 }
 
 // ━━━ 알고리즘 6: 핫/콜드 (결정론) ━━━
-export function algoHotCold(ctx) {
+export function algoHotCold(ctx, rng, opts = {}) {
   const { draws, freq, n } = ctx;
-  const recent = draws.slice(-Math.min(50, draws.length));
+  const window = opts.window ?? 50;
+  const recent = draws.slice(-Math.min(window, draws.length));
   const rf = new Array(46).fill(0);
   for (const d of recent) for (const x of d.nums) rf[x]++;
   const recN = recent.length;
