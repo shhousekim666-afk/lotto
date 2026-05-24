@@ -146,6 +146,16 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 .bt-honest{margin-top:1.5rem;padding:14px 18px;border-radius:12px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.05);font-size:12px;line-height:1.7;color:var(--text2)}
 .bt-honest b{color:var(--blue);font-weight:600}
 .bt-loading{padding:2rem;text-align:center;color:var(--text3);font-size:12px}
+.pick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:1rem}
+.pick-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;position:relative;overflow:hidden}
+.pick-card.gold{border-color:rgba(212,168,67,.32);background:linear-gradient(135deg,rgba(212,168,67,.08),rgba(13,16,24,0) 70%)}
+.pick-card .pick-lbl{font-family:'Oxanium',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.pick-card.gold .pick-lbl{color:var(--gold-lt)}
+.pick-card .pick-name{font-size:15px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.pick-card .pick-score{font-family:'Oxanium',monospace;font-size:11px;color:var(--text2);margin-bottom:8px}
+.pick-card .pick-why{font-size:11.5px;color:var(--text3);line-height:1.6}
+.pick-card .pick-why b{color:var(--text);font-weight:600}
+@media(max-width:560px){.pick-grid{grid-template-columns:1fr}}
 .sim-card{background:var(--bg1);border:1px solid var(--line);border-radius:18px;padding:1.5rem;margin-bottom:1.5rem}
 .sim-intro{font-size:12px;color:var(--text3);line-height:1.7;margin-bottom:1.2rem}
 .sim-inputs{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:1rem;padding:1rem;background:var(--bg2);border-radius:12px;border:1px solid var(--line)}
@@ -312,6 +322,17 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
         BSS 유의성(✓)은 rand 알고리즘의 100회 반복 평균이 평균확률 baseline에 더 가까워졌다는 통계적 특성이지
         실제 예측력 우위가 아닙니다. 로또는 IID(독립 균등 시행)이며 과거 데이터로 미래 추첨을 예측할 수학적 근거는 없습니다.
       </div>
+    </div>
+    <div class="bt-card">
+      <div class="sec-hd" style="margin-bottom:1rem">
+        <div class="sec-hd-lbl">백테스트 기반 추천</div><div class="sec-hd-line"></div>
+      </div>
+      <div class="bt-meta">
+        924회 walk-forward 결과를 토대로 한 <b>상대적 비교 픽</b>입니다.
+        통계적으로 어떤 알고리즘도 무작위와 구별되지 않으므로 아래 추천은 <b>수치상 차이</b>일 뿐 실제 예측력 우위는 아닙니다.
+        선택은 사용자 가치 기준(어떤 종류의 안전감을 원하는지)에 따르세요.
+      </div>
+      <div id="btPickWrap"></div>
     </div>
     <div class="bt-card">
       <div class="sec-hd" style="margin-bottom:1rem">
@@ -722,6 +743,7 @@ async function loadBacktest(){
     const data = await r.json();
     renderBacktestBadges(data);
     renderBacktestTab(data);
+    renderPicks(data);
   }catch(e){
     const w = document.getElementById('btTableWrap');
     if(w) w.innerHTML = `<div class="bt-loading">백테스트 결과 파일을 로드할 수 없습니다 (${e.message}).</div>`;
@@ -838,6 +860,53 @@ function renderBacktestBadges(data){
       <span class="bt-rank">#${s.rankByBSS}</span>
     `;
   }
+}
+function renderPicks(data){
+  const algos = Object.values(data.algos);
+  const byHit = [...algos].sort((a,b)=>b.hitMean-a.hitMean);
+  const byStd = [...algos].sort((a,b)=>a.hitStd-b.hitStd);
+  const top = byHit[0];
+  const stable = byStd[0];
+  const refHit = 6*6/45;
+  const picks = [
+    {
+      lbl: '하나만 고른다면',
+      gold: true,
+      name: top.name,
+      score: `평균 hit ${top.hitMean.toFixed(3)} (무작위 ${refHit.toFixed(3)}, +${((top.hitMean/refHit-1)*100).toFixed(1)}%)`,
+      why: `<b>평균 hit 1위</b>. 결정론적 알고리즘이라 매번 같은 번호 생성. 다만 표준편차 ${top.hitStd.toFixed(2)}로 우연 범위 안.`,
+    },
+    {
+      lbl: '분산 안정 우선',
+      name: stable.name,
+      score: `표준편차 ${stable.hitStd.toFixed(3)} (가장 낮음) · 평균 hit ${stable.hitMean.toFixed(3)}`,
+      why: `<b>변동성이 가장 작음</b>. 매주 결과가 평균에서 크게 벗어나지 않음. 큰 hit도 큰 miss도 적은 보수적 픽.`,
+    },
+    {
+      lbl: '의견 분산',
+      name: '6개 알고리즘 앙상블',
+      score: '6개 추천을 투표 집계 (동점 시 빈도 우선)',
+      why: `<b>홈탭 상단의 황금 번호</b>. 어차피 알고리즘 간 통계적 차이가 없으니 평균이 합리. 한 알고리즘의 노이즈에 의존하지 않음.`,
+    },
+    {
+      lbl: '가장 정직하게',
+      name: '무작위 6개',
+      score: 'IID 가정에서 위와 동등한 EV',
+      why: `<b>로또는 IID</b>. 백테스트가 위 모든 알고리즘이 무작위와 통계적으로 동일함을 입증. 시뮬레이터 탭의 🎲 버튼으로 즉시 생성 가능.`,
+    },
+  ];
+  document.getElementById('btPickWrap').innerHTML = `
+    <div class="pick-grid">
+      ${picks.map(p=>`
+        <div class="pick-card${p.gold?' gold':''}">
+          <div class="pick-lbl">${p.lbl}</div>
+          <div class="pick-name">${p.name}</div>
+          <div class="pick-score">${p.score}</div>
+          <div class="pick-why">${p.why}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 function renderBacktestTab(data){
   const m = data.meta;
