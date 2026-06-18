@@ -51,6 +51,9 @@ jobs:
       - name: Measure fidelity
         run: node backtest/measure-fidelity.js
 
+      - name: Measure stability (recent 10 weeks)
+        run: node backtest/stability.js
+
       - name: Run sweep
         if: ${{ inputs.run_sweep }}
         run: node backtest/sweep.js
@@ -59,7 +62,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add backtest/backtest-summary.json backtest/fidelity-summary.json backtest/sweep-summary.json 2>/dev/null || true
+          git add backtest/backtest-summary.json backtest/fidelity-summary.json backtest/stability-summary.json backtest/sweep-summary.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "변경 없음"
           else

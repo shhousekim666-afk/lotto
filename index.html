@@ -156,6 +156,26 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 .pick-card .pick-why{font-size:11.5px;color:var(--text3);line-height:1.6}
 .pick-card .pick-why b{color:var(--text);font-weight:600}
 @media(max-width:560px){.pick-grid{grid-template-columns:1fr}}
+.stab-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:11.5px}
+.stab-row:last-child{border-bottom:none}
+.stab-name{min-width:90px;font-weight:600}
+.stab-metric{font-family:'Oxanium',monospace;color:var(--text2);min-width:75px}
+.stab-balls-row{display:flex;gap:3px;flex:1;flex-wrap:wrap}
+.stab-week{display:flex;flex-direction:column;align-items:center;gap:2px}
+.stab-week-no{font-family:'Oxanium',monospace;font-size:8.5px;color:var(--text3)}
+.stab-week-balls{display:flex;gap:1.5px}
+.stab-mini{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:8.5px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+.stab-mini.changed{box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 0 0 1.5px var(--gold)}
+.stab-grade{padding:3px 8px;border-radius:99px;font-family:'Oxanium',monospace;font-size:9.5px;letter-spacing:.5px}
+.stab-grade.high{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.3)}
+.stab-grade.med{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.3)}
+.stab-grade.low{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+@media(max-width:560px){
+  .stab-row{flex-wrap:wrap;gap:6px}
+  .stab-name{min-width:auto;width:100%}
+  .stab-balls-row{overflow-x:auto;flex-wrap:nowrap;width:100%;padding-bottom:4px}
+  .stab-week{flex-shrink:0}
+}
 .sim-card{background:var(--bg1);border:1px solid var(--line);border-radius:18px;padding:1.5rem;margin-bottom:1.5rem}
 .sim-intro{font-size:12px;color:var(--text3);line-height:1.7;margin-bottom:1.2rem}
 .sim-inputs{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:1rem;padding:1rem;background:var(--bg2);border-radius:12px;border:1px solid var(--line)}
@@ -366,6 +386,15 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
     </div>
     <div class="bt-card">
       <div class="sec-hd" style="margin-bottom:1rem">
+        <div class="sec-hd-lbl">주간 추천 안정성 (지난 10주)</div><div class="sec-hd-line"></div>
+      </div>
+      <div class="bt-meta" id="btStabMeta"></div>
+      <div id="btStabWrap">
+        <div class="bt-loading">안정성 데이터 로딩 중...</div>
+      </div>
+    </div>
+    <div class="bt-card">
+      <div class="sec-hd" style="margin-bottom:1rem">
         <div class="sec-hd-lbl">하이퍼파라미터 sweep</div><div class="sec-hd-line"></div>
       </div>
       <div class="bt-meta" id="btSweepMeta"></div>
@@ -468,24 +497,19 @@ function algoFreq(){
 // 특성: 결정론적 (재생성 해도 동일)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function algoCooccur(){
-  const maxCoSum=Math.max(...CO_SUM.slice(1));
-  const chosen=[];
-  // 1번째: 총 공출현 합 정규화 최고
-  let bst=-1,bscore=-Infinity;
-  for(let n=1;n<=45;n++){
-    const s=CO_SUM[n]/maxCoSum;
-    if(s>bscore){bscore=s;bst=n;}
-  }
-  chosen.push(bst);
-  // 2~6번째: 기선택 번호들과의 평균 공출현 정규화 최고 (일관된 기준)
+  // 가중 샘플링: 1번째 = CO_SUM top-6 중 점수² 가중 / 이후 = 평균 공출현 top-6 중 가중
+  const TOP_K=6;
+  const all=Array.from({length:45},(_,i)=>i+1);
+  const top1=[...all].sort((a,b)=>CO_SUM[b]-CO_SUM[a]).slice(0,TOP_K);
+  const w1=top1.map(n=>CO_SUM[n]**2);
+  const chosen=[top1[wSample(w1)]];
   while(chosen.length<6){
-    let bn=-1,bs=-Infinity;
-    for(let n=1;n<=45;n++){
-      if(chosen.includes(n)) continue;
-      const s=chosen.reduce((sum,c)=>sum+CO[n][c]/MAX_CO_PAIR,0)/chosen.length;
-      if(s>bs){bs=s;bn=n;}
-    }
-    chosen.push(bn);
+    const cands=all.filter(n=>!chosen.includes(n));
+    const scored=cands.map(n=>({n,s:chosen.reduce((a,c)=>a+CO[n][c],0)/chosen.length})).sort((a,b)=>b.s-a.s);
+    const topK=scored.slice(0,Math.min(TOP_K,scored.length));
+    const w=topK.map(x=>x.s**2);
+    if(w.every(x=>x===0)) chosen.push(topK[0].n);
+    else chosen.push(topK[wSample(w)].n);
   }
   return chosen.sort((a,b)=>a-b);
 }
@@ -529,12 +553,13 @@ function algoMonte(){
 // 특성: 결정론적 (재생성 해도 동일)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function algoDelta(){
-  // 시작번호: 전체 회차 최솟값 빈도 집계에서 최빈값 (= 1번, 167회)
+  // 시작번호: 최솟값 빈도 top-5 (1~5번) 중 빈도² 가중 샘플
   const startFreq=new Array(8).fill(0);
   DRAWS.forEach(d=>{const mn=Math.min(...d.nums);if(mn<=7)startFreq[mn]++;});
-  let startNum=1;
-  for(let i=1;i<=7;i++) if(startFreq[i]>startFreq[startNum]) startNum=i;
-  // 평균 델타 적용 (Math.round로 정수화)
+  const startCands=[1,2,3,4,5];
+  const startW=startCands.map(n=>Math.max(1,startFreq[n])**2);
+  const startNum=startCands[wSample(startW)];
+  // 평균 델타 적용 (이론 보존)
   const nums=[startNum];
   for(let i=0;i<5;i++) nums.push(Math.min(45,Math.round(nums[nums.length-1]+DELTA_AVG[i])));
   const unique=[...new Set(nums.filter(n=>n>=1&&n<=45))].slice(0,6);
@@ -578,7 +603,16 @@ function algoGenetic(){
     }
     pop=next;
   }
-  return pop[0].sort((a,b)=>a-b);
+  // 진화 후 top-10 unique 중 fitness² 가중 샘플 (수렴 후 다양성)
+  pop.sort((a,b)=>fitness(b)-fitness(a));
+  const uniq=[]; const seen=new Set();
+  for(const ind of pop){
+    const s=[...ind].sort((a,b)=>a-b);
+    const k=s.join(',');
+    if(!seen.has(k)){seen.add(k); uniq.push(s); if(uniq.length>=10) break;}
+  }
+  const w=uniq.map(ind=>Math.max(.001,fitness(ind))**2);
+  return uniq[wSample(w)];
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -604,8 +638,15 @@ function algoHotCold(){
     const cold=Math.max(0,pLong-pRec);
     scores[n]=hot*0.6+cold*0.4;
   }
-  return Array.from({length:45},(_,i)=>i+1)
-    .sort((a,b)=>scores[b]-scores[a]).slice(0,6).sort((a,b)=>a-b);
+  // 점수 top-12 중 점수² 가중 비복원 추출 (freq와 동일 패턴)
+  const TOP_K=12;
+  const ranked=Array.from({length:45},(_,i)=>i+1).sort((a,b)=>scores[b]-scores[a]);
+  const topK=ranked.slice(0,TOP_K);
+  const w=topK.map(n=>scores[n]**2);
+  const chosen=new Set(); let t=0;
+  while(chosen.size<6&&t++<400) chosen.add(topK[wSample(w)]);
+  for(const n of topK){if(chosen.size>=6)break;chosen.add(n);}
+  return [...chosen].sort((a,b)=>a-b);
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -628,25 +669,25 @@ const ALGOS=[
    desc:'1,228회 경험적 빈도 가중 샘플링',
    math:'상위 12개 후보 · 빈도² 가중 비복원 추출',
    icon:'📊',cc:'#2dd4bf',cg:'rgba(45,212,191,.1)',cb:'rgba(45,212,191,.22)',fn:algoFreq},
-  {id:'cooccur',name:'공출현 행렬',  tag:'수학',   det:'fixed',
-   desc:'동일 회차 공출현 응집도 그리디 최대화',
-   math:'FREQ 항 제거(상관계수 1.0) · 정규화 일관 기준',
+  {id:'cooccur',name:'공출현 행렬',  tag:'수학',   det:'rand',
+   desc:'공출현 응집도 top-6 점수² 가중 샘플링',
+   math:'1번째: CO_SUM top-6 · 이후: 평균 공출현 top-6',
    icon:'🔗',cc:'#60a5fa',cg:'rgba(96,165,250,.1)',cb:'rgba(96,165,250,.22)',fn:algoCooccur},
   {id:'monte',  name:'몬테카를로',   tag:'시뮬레이션',det:'rand',
    desc:'10만 회 조합 탐색 · 세트 공출현 최고 반환',
    math:'빈도 분석과 독립: 번호간 관계성(C(45,6)=8,145,060) 탐색',
    icon:'🎲',cc:'#fbbf24',cg:'rgba(251,191,36,.1)',cb:'rgba(251,191,36,.22)',fn:algoMonte},
-  {id:'delta',  name:'델타 수열',    tag:'수열',   det:'fixed',
-   desc:'실데이터 평균 간격 결정론적 역산',
-   math:'Δavg=[6.33,6.86,6.29,6.62,6.59] · 노이즈 제거',
+  {id:'delta',  name:'델타 수열',    tag:'수열',   det:'rand',
+   desc:'평균 간격 + 시작번호 빈도 가중 샘플',
+   math:'시작 ∈ {1..5} 빈도² 가중 · Δavg=[6.33,6.85,6.29,6.62,6.59]',
    icon:'📐',cc:'#a78bfa',cg:'rgba(167,139,250,.1)',cb:'rgba(167,139,250,.22)',fn:algoDelta},
   {id:'genetic',name:'유전 알고리즘',tag:'최적화', det:'rand',
    desc:'80세대 120개체 · z-score 적합도 함수',
    math:'penSum=((Δ/σ30.8)²×0.05) · penOdd=((Δ/σ1.15)²×0.05)',
    icon:'🧬',cc:'#f87171',cg:'rgba(248,113,113,.1)',cb:'rgba(248,113,113,.22)',fn:algoGenetic},
-  {id:'hotcold',name:'핫/콜드 전략', tag:'혼합',   det:'fixed',
-   desc:'장기·최근 회당 확률 차이 가중 혼합',
-   math:'p_long=FREQ/N · p_rec=rf/50 · score=hot×0.6+cold×0.4',
+  {id:'hotcold',name:'핫/콜드 전략', tag:'혼합',   det:'rand',
+   desc:'장기·최근 점수 top-12 가중 추출',
+   math:'score=p_rec×0.6+max(0,p_long-p_rec)×0.4 · 점수² 가중',
    icon:'🌡️',cc:'#fb923c',cg:'rgba(251,146,60,.1)',cb:'rgba(251,146,60,.22)',fn:algoHotCold},
 ];
 
@@ -775,6 +816,15 @@ async function loadBacktest(){
     const w = document.getElementById('btFidelityWrap');
     if(w) w.innerHTML = `<div class="bt-loading">충실성 데이터 없음 (${e.message}).</div>`;
   }
+  // 안정성 별도 로드
+  try{
+    const r4 = await fetch('backtest/stability-summary.json',{cache:'no-cache'});
+    if(!r4.ok) throw new Error('stability 없음');
+    renderStability(await r4.json());
+  }catch(e){
+    const w = document.getElementById('btStabWrap');
+    if(w) w.innerHTML = `<div class="bt-loading">안정성 데이터 없음 (${e.message}).</div>`;
+  }
   // sweep 별도 로드
   try{
     const r3 = await fetch('backtest/sweep-summary.json',{cache:'no-cache'});
@@ -784,6 +834,53 @@ async function loadBacktest(){
     const w = document.getElementById('btSweepWrap');
     if(w) w.innerHTML = `<div class="bt-loading">sweep 데이터 없음 (${e.message}).</div>`;
   }
+}
+function renderStability(data){
+  const m = data.meta;
+  document.getElementById('btStabMeta').innerHTML = `
+    추적 범위: <b>${m.weekRange[0]}회 ~ ${m.weekRange[1]}회 (${m.weeksTracked}주)</b> ·
+    시드 규약: ${m.seedConvention} · monte sims: ${m.monteSims.toLocaleString()}<br>
+    매주 새 회차가 데이터에 추가될 때 각 알고리즘이 어떻게 변하는지 직접 측정.
+    <b>모든 알고리즘이 사후분포 가중 샘플링</b>으로 매주 다양한 결과를 산출합니다.
+  `;
+  const algoOrder = ['cooccur','delta','hotcold','genetic','freq','monte'];
+  let html = '';
+  for(const id of algoOrder){
+    const s = data.stats[id]; if(!s) continue;
+    const grade = s.avgChangePerWeek < 0.5 ? 'high' : s.avgChangePerWeek < 2 ? 'med' : 'low';
+    const gradeLbl = grade==='high' ? '매우 안정' : grade==='med' ? '중간' : '변동 큼';
+    let ballsHtml = '';
+    for(let i=0;i<data.weeks.length;i++){
+      const w = data.weeks[i];
+      const nums = w.predictions[id];
+      const prevNums = i>0 ? data.weeks[i-1].predictions[id] : null;
+      const prevSet = prevNums ? new Set(prevNums) : null;
+      ballsHtml += `<div class="stab-week" title="${w.round}회 (${w.date})">
+        <div class="stab-week-no">${w.round}</div>
+        <div class="stab-week-balls">
+          ${nums.map(n=>{
+            const changed = prevSet && !prevSet.has(n) ? ' changed' : '';
+            return `<div class="stab-mini ${bc(n)}${changed}">${n}</div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }
+    html += `<div class="stab-row">
+      <div class="stab-name">${s.name}</div>
+      <div class="stab-metric">변경 ${s.avgChangePerWeek}/주</div>
+      <div class="stab-metric">첫↔끝 ${s.firstVsLastOverlap}/6</div>
+      <span class="stab-grade ${grade}">${gradeLbl}</span>
+      <div class="stab-balls-row">${ballsHtml}</div>
+    </div>`;
+  }
+  html += `<div class="bt-honest" style="margin-top:1.2rem">
+    <b>해석</b> · 모든 알고리즘이 사후분포(score² 가중) 샘플링이라 매주 다양한 추천을 산출합니다.
+    각 알고리즘이 발견한 통계 신호(공출현/빈도/델타/hot+cold 점수)는 그대로 보존하면서,
+    그리디 단일 선택 대신 분포 샘플로 변경 — 베이지안 관점에서 정보 손실 없음.
+    delta는 시작번호 후보가 1~5의 5가지로 본질적 제한이 있어 변동 폭이 다른 알고리즘보다 작습니다.
+    <span style="color:var(--gold)">━━ 직전 주 대비 변경된 번호는 황금 테두리로 강조 ━━</span>
+  </div>`;
+  document.getElementById('btStabWrap').innerHTML = html;
 }
 function renderSweep(data){
   const m = data.meta;

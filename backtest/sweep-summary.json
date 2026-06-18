@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-24T00:54:00.124Z",
+    "generatedAt": "2026-06-18T10:12:34.541Z",
     "trainRange": [
       301,
       1100
@@ -10,7 +10,7 @@
       1224
     ],
     "overfitThresholdPct": 10,
-    "elapsedSec": 278.03,
+    "elapsedSec": 524.13,
     "note": "각 조합 회차당 1 run (시드 고정). 알고리즘별 최적은 hold-out 기준. 자동 채택 X, 참고용."
   },
   "algos": {
@@ -158,11 +158,11 @@
             "window": 100
           },
           "paramKey": "window=100",
-          "trainMean": 0.7963,
-          "trainStd": 0.763,
-          "holdoutMean": 0.8306,
-          "holdoutStd": 0.7591,
-          "deltaPct": -4.31,
+          "trainMean": 0.7738,
+          "trainStd": 0.7859,
+          "holdoutMean": 0.8226,
+          "holdoutStd": 0.7834,
+          "deltaPct": -6.31,
           "overfit": false
         },
         {
@@ -170,23 +170,11 @@
             "window": 50
           },
           "paramKey": "window=50",
-          "trainMean": 0.8087,
-          "trainStd": 0.7597,
+          "trainMean": 0.8488,
+          "trainStd": 0.8037,
           "holdoutMean": 0.7823,
-          "holdoutStd": 0.7573,
-          "deltaPct": 3.26,
-          "overfit": false
-        },
-        {
-          "params": {
-            "window": 20
-          },
-          "paramKey": "window=20",
-          "trainMean": 0.795,
-          "trainStd": 0.7861,
-          "holdoutMean": 0.7661,
-          "holdoutStd": 0.7083,
-          "deltaPct": 3.64,
+          "holdoutStd": 0.7247,
+          "deltaPct": 7.83,
           "overfit": false
         },
         {
@@ -194,23 +182,35 @@
             "window": 10
           },
           "paramKey": "window=10",
-          "trainMean": 0.8313,
-          "trainStd": 0.7892,
+          "trainMean": 0.815,
+          "trainStd": 0.7702,
+          "holdoutMean": 0.7661,
+          "holdoutStd": 0.8043,
+          "deltaPct": 6,
+          "overfit": false
+        },
+        {
+          "params": {
+            "window": 20
+          },
+          "paramKey": "window=20",
+          "trainMean": 0.805,
+          "trainStd": 0.8028,
           "holdoutMean": 0.7258,
-          "holdoutStd": 0.8066,
-          "deltaPct": 12.69,
-          "overfit": true
+          "holdoutStd": 0.6879,
+          "deltaPct": 9.84,
+          "overfit": false
         },
         {
           "params": {
             "window": 30
           },
           "paramKey": "window=30",
-          "trainMean": 0.8113,
-          "trainStd": 0.775,
-          "holdoutMean": 0.7177,
-          "holdoutStd": 0.6905,
-          "deltaPct": 11.54,
+          "trainMean": 0.835,
+          "trainStd": 0.7955,
+          "holdoutMean": 0.6935,
+          "holdoutStd": 0.686,
+          "deltaPct": 16.95,
           "overfit": true
         }
       ],
@@ -219,11 +219,11 @@
           "window": 100
         },
         "paramKey": "window=100",
-        "trainMean": 0.7963,
-        "trainStd": 0.763,
-        "holdoutMean": 0.8306,
-        "holdoutStd": 0.7591,
-        "deltaPct": -4.31,
+        "trainMean": 0.7738,
+        "trainStd": 0.7859,
+        "holdoutMean": 0.8226,
+        "holdoutStd": 0.7834,
+        "deltaPct": -6.31,
         "overfit": false
       },
       "defaults": {
@@ -235,15 +235,15 @@
       "trials": [
         {
           "params": {
-            "gens": 50,
-            "popSize": 200
+            "gens": 200,
+            "popSize": 100
           },
-          "paramKey": "gens=50/popSize=200",
-          "trainMean": 0.7625,
-          "trainStd": 0.7574,
-          "holdoutMean": 0.8387,
-          "holdoutStd": 0.7765,
-          "deltaPct": -9.99,
+          "paramKey": "gens=200/popSize=100",
+          "trainMean": 0.7963,
+          "trainStd": 0.7598,
+          "holdoutMean": 0.8548,
+          "holdoutStd": 0.7262,
+          "deltaPct": -7.35,
           "overfit": false
         },
         {
@@ -252,11 +252,11 @@
             "popSize": 200
           },
           "paramKey": "gens=100/popSize=200",
-          "trainMean": 0.7625,
-          "trainStd": 0.7574,
+          "trainMean": 0.78,
+          "trainStd": 0.79,
           "holdoutMean": 0.8387,
-          "holdoutStd": 0.7765,
-          "deltaPct": -9.99,
+          "holdoutStd": 0.797,
+          "deltaPct": -7.53,
           "overfit": false
         },
         {
@@ -265,12 +265,12 @@
             "popSize": 200
           },
           "paramKey": "gens=200/popSize=200",
-          "trainMean": 0.7625,
-          "trainStd": 0.7574,
+          "trainMean": 0.7538,
+          "trainStd": 0.7701,
           "holdoutMean": 0.8387,
-          "holdoutStd": 0.7765,
-          "deltaPct": -9.99,
-          "overfit": false
+          "holdoutStd": 0.7447,
+          "deltaPct": -11.26,
+          "overfit": true
         },
         {
           "params": {
@@ -278,11 +278,11 @@
             "popSize": 50
           },
           "paramKey": "gens=50/popSize=50",
-          "trainMean": 0.7887,
-          "trainStd": 0.8165,
-          "holdoutMean": 0.7742,
-          "holdoutStd": 0.6937,
-          "deltaPct": 1.84,
+          "trainMean": 0.78,
+          "trainStd": 0.7772,
+          "holdoutMean": 0.7823,
+          "holdoutStd": 0.7466,
+          "deltaPct": -0.29,
           "overfit": false
         },
         {
@@ -291,50 +291,11 @@
             "popSize": 50
           },
           "paramKey": "gens=100/popSize=50",
-          "trainMean": 0.7725,
-          "trainStd": 0.7926,
-          "holdoutMean": 0.7661,
-          "holdoutStd": 0.7632,
-          "deltaPct": 0.83,
-          "overfit": false
-        },
-        {
-          "params": {
-            "gens": 200,
-            "popSize": 50
-          },
-          "paramKey": "gens=200/popSize=50",
-          "trainMean": 0.7688,
-          "trainStd": 0.7939,
-          "holdoutMean": 0.7419,
-          "holdoutStd": 0.75,
-          "deltaPct": 3.5,
-          "overfit": false
-        },
-        {
-          "params": {
-            "gens": 100,
-            "popSize": 100
-          },
-          "paramKey": "gens=100/popSize=100",
-          "trainMean": 0.7925,
-          "trainStd": 0.7791,
-          "holdoutMean": 0.7339,
-          "holdoutStd": 0.7196,
-          "deltaPct": 7.39,
-          "overfit": false
-        },
-        {
-          "params": {
-            "gens": 200,
-            "popSize": 100
-          },
-          "paramKey": "gens=200/popSize=100",
-          "trainMean": 0.79,
-          "trainStd": 0.78,
-          "holdoutMean": 0.7339,
-          "holdoutStd": 0.7196,
-          "deltaPct": 7.1,
+          "trainMean": 0.7438,
+          "trainStd": 0.7487,
+          "holdoutMean": 0.7742,
+          "holdoutStd": 0.7915,
+          "deltaPct": -4.09,
           "overfit": false
         },
         {
@@ -343,25 +304,64 @@
             "popSize": 100
           },
           "paramKey": "gens=50/popSize=100",
-          "trainMean": 0.79,
-          "trainStd": 0.7736,
-          "holdoutMean": 0.7177,
-          "holdoutStd": 0.7135,
-          "deltaPct": 9.15,
+          "trainMean": 0.77,
+          "trainStd": 0.7711,
+          "holdoutMean": 0.7661,
+          "holdoutStd": 0.7632,
+          "deltaPct": 0.51,
           "overfit": false
+        },
+        {
+          "params": {
+            "gens": 50,
+            "popSize": 200
+          },
+          "paramKey": "gens=50/popSize=200",
+          "trainMean": 0.7675,
+          "trainStd": 0.749,
+          "holdoutMean": 0.7581,
+          "holdoutStd": 0.7446,
+          "deltaPct": 1.22,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 200,
+            "popSize": 50
+          },
+          "paramKey": "gens=200/popSize=50",
+          "trainMean": 0.7712,
+          "trainStd": 0.7915,
+          "holdoutMean": 0.7581,
+          "holdoutStd": 0.7764,
+          "deltaPct": 1.7,
+          "overfit": false
+        },
+        {
+          "params": {
+            "gens": 100,
+            "popSize": 100
+          },
+          "paramKey": "gens=100/popSize=100",
+          "trainMean": 0.8037,
+          "trainStd": 0.7876,
+          "holdoutMean": 0.6935,
+          "holdoutStd": 0.6741,
+          "deltaPct": 13.71,
+          "overfit": true
         }
       ],
       "best": {
         "params": {
-          "gens": 50,
-          "popSize": 200
+          "gens": 200,
+          "popSize": 100
         },
-        "paramKey": "gens=50/popSize=200",
-        "trainMean": 0.7625,
-        "trainStd": 0.7574,
-        "holdoutMean": 0.8387,
-        "holdoutStd": 0.7765,
-        "deltaPct": -9.99,
+        "paramKey": "gens=200/popSize=100",
+        "trainMean": 0.7963,
+        "trainStd": 0.7598,
+        "holdoutMean": 0.8548,
+        "holdoutStd": 0.7262,
+        "deltaPct": -7.35,
         "overfit": false
       },
       "defaults": {
