@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-05-23T16:08:06.986Z",
-    "totalDraws": 1224,
+    "generatedAt": "2026-06-18T11:41:13.215Z",
+    "totalDraws": 1228,
     "evalStart": 301,
-    "evalEnd": 1224,
+    "evalEnd": 1228,
     "step": 1,
     "randRuns": 100,
     "monteSims": 10000,
-    "elapsedSec": 4446.38,
+    "elapsedSec": 5849.24,
     "detailFile": "backtest-detail.json"
   },
   "algos": {
@@ -15,24 +15,55 @@
       "algoId": "freq",
       "name": "빈도 분석",
       "det": false,
-      "evalRounds": 924,
-      "hitMean": 0.7779,
-      "hitStd": 0.5204,
+      "evalRounds": 928,
+      "hitMean": 0.7767,
+      "hitStd": 0.5207,
       "hitDist": [
-        380,
         383,
-        135,
+        383,
+        136,
         25,
         1,
         0,
         0
       ],
-      "meanBS": 0.166327,
+      "meanBS": 0.166381,
       "meanBSRef": 0.115556,
-      "bss": -0.439371,
+      "bss": -0.439833,
       "bssCI": [
-        -0.452353,
-        -0.426437
+        -0.452894,
+        -0.426733
+      ],
+      "pValue": 0,
+      "nullSimCount": 10000,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 4
+    },
+    "cooccur": {
+      "algoId": "cooccur",
+      "name": "공출현 행렬",
+      "det": false,
+      "evalRounds": 928,
+      "hitMean": 0.7825,
+      "hitStd": 0.3192,
+      "hitDist": [
+        356,
+        405,
+        145,
+        19,
+        3,
+        0,
+        0
+      ],
+      "meanBS": 0.134472,
+      "meanBSRef": 0.115556,
+      "bss": -0.163696,
+      "bssCI": [
+        -0.171954,
+        -0.155545
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -42,121 +73,28 @@
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 2
     },
-    "cooccur": {
-      "algoId": "cooccur",
-      "name": "공출현 행렬",
-      "det": true,
-      "evalRounds": 924,
-      "hitMean": 0.7587,
-      "hitStd": 0.7681,
-      "hitDist": [
-        389,
-        391,
-        122,
-        22,
-        0,
-        0,
-        0
-      ],
-      "meanBS": 0.232949,
-      "meanBSRef": 0.115556,
-      "bss": -1.015901,
-      "bssCI": [
-        -1.034632,
-        -0.996753
-      ],
-      "pValue": 0.9466,
-      "nullSimCount": 10000,
-      "randRuns": 1,
-      "pValueBonferroni": 1,
-      "isSignificant": false,
-      "bonferroniAlpha": 0.008333,
-      "rankByBSS": 6
-    },
     "monte": {
       "algoId": "monte",
       "name": "몬테카를로",
       "det": false,
-      "evalRounds": 924,
-      "hitMean": 0.7748,
-      "hitStd": 0.3963,
+      "evalRounds": 928,
+      "hitMean": 0.7738,
+      "hitStd": 0.3958,
       "hitDist": [
-        389,
-        372,
+        391,
+        374,
         142,
         21,
         0,
         0,
         0
       ],
-      "meanBS": 0.147236,
+      "meanBS": 0.147232,
       "meanBSRef": 0.115556,
-      "bss": -0.274157,
+      "bss": -0.274126,
       "bssCI": [
-        -0.285715,
-        -0.263072
-      ],
-      "pValue": 0,
-      "nullSimCount": 10000,
-      "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
-      "bonferroniAlpha": 0.008333,
-      "rankByBSS": 1
-    },
-    "delta": {
-      "algoId": "delta",
-      "name": "델타 수열",
-      "det": true,
-      "evalRounds": 924,
-      "hitMean": 0.8258,
-      "hitStd": 0.768,
-      "hitDist": [
-        342,
-        425,
-        134,
-        22,
-        1,
-        0,
-        0
-      ],
-      "meanBS": 0.229966,
-      "meanBSRef": 0.115556,
-      "bss": -0.990093,
-      "bssCI": [
-        -1.009241,
-        -0.971362
-      ],
-      "pValue": 0.1563,
-      "nullSimCount": 10000,
-      "randRuns": 1,
-      "pValueBonferroni": 0.9378,
-      "isSignificant": false,
-      "bonferroniAlpha": 0.008333,
-      "rankByBSS": 4
-    },
-    "genetic": {
-      "algoId": "genetic",
-      "name": "유전 알고리즘",
-      "det": false,
-      "evalRounds": 924,
-      "hitMean": 0.7763,
-      "hitStd": 0.7111,
-      "hitDist": [
-        381,
-        397,
-        129,
-        17,
-        0,
-        0,
-        0
-      ],
-      "meanBS": 0.216445,
-      "meanBSRef": 0.115556,
-      "bss": -0.873086,
-      "bssCI": [
-        -0.892228,
-        -0.853665
+        -0.28551,
+        -0.262634
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -166,34 +104,96 @@
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 3
     },
+    "delta": {
+      "algoId": "delta",
+      "name": "델타 수열",
+      "det": false,
+      "evalRounds": 928,
+      "hitMean": 0.805,
+      "hitStd": 0.2848,
+      "hitDist": [
+        354,
+        420,
+        128,
+        25,
+        1,
+        0,
+        0
+      ],
+      "meanBS": 0.130253,
+      "meanBSRef": 0.115556,
+      "bss": -0.127194,
+      "bssCI": [
+        -0.134426,
+        -0.119995
+      ],
+      "pValue": 0,
+      "nullSimCount": 10000,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 1
+    },
+    "genetic": {
+      "algoId": "genetic",
+      "name": "유전 알고리즘",
+      "det": false,
+      "evalRounds": 928,
+      "hitMean": 0.7765,
+      "hitStd": 0.5892,
+      "hitDist": [
+        404,
+        379,
+        125,
+        19,
+        1,
+        0,
+        0
+      ],
+      "meanBS": 0.18603,
+      "meanBSRef": 0.115556,
+      "bss": -0.609874,
+      "bssCI": [
+        -0.624974,
+        -0.594228
+      ],
+      "pValue": 0,
+      "nullSimCount": 10000,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
+      "bonferroniAlpha": 0.008333,
+      "rankByBSS": 6
+    },
     "hotcold": {
       "algoId": "hotcold",
       "name": "핫/콜드",
-      "det": true,
-      "evalRounds": 924,
-      "hitMean": 0.8052,
-      "hitStd": 0.7595,
+      "det": false,
+      "evalRounds": 928,
+      "hitMean": 0.8008,
+      "hitStd": 0.5193,
       "hitDist": [
-        355,
-        413,
-        137,
-        19,
+        358,
+        382,
+        167,
+        21,
         0,
         0,
         0
       ],
-      "meanBS": 0.23088,
+      "meanBS": 0.167447,
       "meanBSRef": 0.115556,
-      "bss": -0.998002,
+      "bss": -0.449062,
       "bssCI": [
-        -1.016733,
-        -0.979687
+        -0.462205,
+        -0.436014
       ],
-      "pValue": 0.4248,
+      "pValue": 0,
       "nullSimCount": 10000,
-      "randRuns": 1,
-      "pValueBonferroni": 1,
-      "isSignificant": false,
+      "randRuns": 100,
+      "pValueBonferroni": 0,
+      "isSignificant": true,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 5
     }
