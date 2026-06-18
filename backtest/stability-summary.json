@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-06-18T10:03:50.313Z",
+    "generatedAt": "2026-06-18T14:34:05.335Z",
     "weekRange": [
       1219,
       1228
@@ -8,7 +8,7 @@
     "weeksTracked": 10,
     "monteSims": 100000,
     "seedConvention": "round=current_max, runIdx=0",
-    "elapsedSec": 4.09
+    "elapsedSec": 3.71
   },
   "weeks": [
     {
@@ -40,12 +40,12 @@
           24
         ],
         "delta": [
-          2,
-          8,
-          15,
-          21,
-          28,
-          35
+          3,
+          9,
+          16,
+          22,
+          29,
+          36
         ],
         "genetic": [
           12,
@@ -94,12 +94,12 @@
           40
         ],
         "delta": [
-          2,
-          8,
-          15,
-          21,
-          28,
-          35
+          3,
+          9,
+          16,
+          22,
+          29,
+          36
         ],
         "genetic": [
           13,
@@ -148,12 +148,12 @@
           40
         ],
         "delta": [
-          4,
-          10,
-          17,
-          23,
-          30,
-          37
+          5,
+          11,
+          18,
+          24,
+          31,
+          38
         ],
         "genetic": [
           12,
@@ -256,12 +256,12 @@
           40
         ],
         "delta": [
-          1,
-          7,
-          14,
-          20,
-          27,
-          34
+          2,
+          8,
+          15,
+          21,
+          28,
+          35
         ],
         "genetic": [
           11,
@@ -310,12 +310,12 @@
           40
         ],
         "delta": [
-          5,
-          11,
-          18,
-          24,
-          31,
-          38
+          6,
+          12,
+          19,
+          25,
+          32,
+          39
         ],
         "genetic": [
           12,
@@ -364,12 +364,12 @@
           33
         ],
         "delta": [
-          5,
-          11,
-          18,
-          24,
-          31,
-          38
+          6,
+          12,
+          19,
+          25,
+          32,
+          39
         ],
         "genetic": [
           3,
@@ -418,12 +418,12 @@
           40
         ],
         "delta": [
-          3,
-          9,
-          16,
-          22,
-          29,
-          36
+          4,
+          10,
+          17,
+          23,
+          30,
+          37
         ],
         "genetic": [
           1,
@@ -590,12 +590,12 @@
       "name": "델타 수열",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 4,
+      "avgChangePerWeek": 4.67,
       "maxChange": 6,
-      "changedWeeks": 6,
-      "avgJaccard": 0.333,
-      "firstVsLastOverlap": 6,
-      "firstVsLastJaccard": 1
+      "changedWeeks": 7,
+      "avgJaccard": 0.222,
+      "firstVsLastOverlap": 0,
+      "firstVsLastJaccard": 0
     },
     "genetic": {
       "name": "유전 알고리즘",

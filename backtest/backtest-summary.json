@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-06-18T11:41:13.215Z",
+    "generatedAt": "2026-06-18T14:33:50.843Z",
     "totalDraws": 1228,
     "evalStart": 301,
     "evalEnd": 1228,
     "step": 1,
     "randRuns": 100,
     "monteSims": 10000,
-    "elapsedSec": 5849.24,
+    "elapsedSec": 4577,
     "detailFile": "backtest-detail.json"
   },
   "algos": {
@@ -31,8 +31,8 @@
       "meanBSRef": 0.115556,
       "bss": -0.439833,
       "bssCI": [
-        -0.452894,
-        -0.426733
+        -0.452498,
+        -0.427423
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -62,8 +62,8 @@
       "meanBSRef": 0.115556,
       "bss": -0.163696,
       "bssCI": [
-        -0.171954,
-        -0.155545
+        -0.171894,
+        -0.155463
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -93,8 +93,8 @@
       "meanBSRef": 0.115556,
       "bss": -0.274126,
       "bssCI": [
-        -0.28551,
-        -0.262634
+        -0.285386,
+        -0.262783
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -109,23 +109,23 @@
       "name": "델타 수열",
       "det": false,
       "evalRounds": 928,
-      "hitMean": 0.805,
-      "hitStd": 0.2848,
+      "hitMean": 0.8051,
+      "hitStd": 0.2286,
       "hitDist": [
         354,
-        420,
-        128,
+        401,
+        147,
         25,
         1,
         0,
         0
       ],
-      "meanBS": 0.130253,
+      "meanBS": 0.125189,
       "meanBSRef": 0.115556,
-      "bss": -0.127194,
+      "bss": -0.083368,
       "bssCI": [
-        -0.134426,
-        -0.119995
+        -0.089117,
+        -0.077602
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -155,8 +155,8 @@
       "meanBSRef": 0.115556,
       "bss": -0.609874,
       "bssCI": [
-        -0.624974,
-        -0.594228
+        -0.625016,
+        -0.594474
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -186,8 +186,8 @@
       "meanBSRef": 0.115556,
       "bss": -0.449062,
       "bssCI": [
-        -0.462205,
-        -0.436014
+        -0.461891,
+        -0.436153
       ],
       "pValue": 0,
       "nullSimCount": 10000,
