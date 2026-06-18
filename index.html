@@ -228,7 +228,46 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 @keyframes ballDrop{0%{opacity:0;transform:scale(.4) translateY(-14px)}70%{transform:scale(1.05) translateY(1px)}100%{opacity:1;transform:scale(1) translateY(0)}}
 .ball-anim{animation:ballDrop .38s cubic-bezier(.34,1.56,.64,1) both}
 @media(max-width:900px){.algo-grid{grid-template-columns:repeat(2,1fr)}.mini-stats{grid-template-columns:repeat(2,1fr)}.ensemble-inner{flex-wrap:wrap;gap:1.2rem}.ensemble-ghost{display:none}}
-@media(max-width:560px){.algo-grid{grid-template-columns:1fr}.freq-grid{grid-template-columns:repeat(5,1fr)}header{padding:0 1rem}main{padding:1.5rem 1rem 3rem}.hc-grid{grid-template-columns:1fr}}
+@media(max-width:560px){
+  .algo-grid{grid-template-columns:1fr}
+  .freq-grid{grid-template-columns:repeat(5,1fr)}
+  header{padding:0 1rem;height:54px}
+  main{padding:1.2rem 1rem 3rem}
+  .hc-grid{grid-template-columns:1fr}
+  .h-logo-name{font-size:1rem}
+  .h-logo-badge{width:30px;height:30px;font-size:11px}
+  .h-chips .chip:first-of-type{display:none}
+  .tabs{padding:3px;gap:2px}
+  .tab{font-size:11px;padding:8px 0;letter-spacing:-.2px}
+  .hero{padding:1.6rem 0 1.2rem}
+  .hero-h1{font-size:2.4rem}
+  .hero-sub{font-size:11.5px;margin-bottom:1rem;padding:0 .5rem}
+  .next-badge{font-size:10.5px;padding:8px 16px;gap:8px}
+  /* 앙상블: 트로피/타이틀 위 → 볼 6개 가로 정렬 → 재생성 아래 */
+  .ensemble-wrap{margin-bottom:1.5rem}
+  .ensemble-inner{padding:1.2rem 1rem;flex-direction:column;align-items:stretch;gap:1rem}
+  .ensemble-meta{display:flex;align-items:center;gap:.6rem;text-align:left}
+  .ensemble-meta .ensemble-trophy{font-size:1.6rem;margin-bottom:0}
+  .ensemble-meta>div:last-child{flex:1}
+  .ensemble-balls{justify-content:space-between;flex-wrap:nowrap;gap:4px}
+  .e-ball{width:42px;height:42px;font-size:14px}
+  .btn-regen-all{width:100%}
+  /* 시뮬레이터 입력: 3열 그리드 */
+  .sim-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:.9rem}
+  .sim-inp{width:100%;height:52px;font-size:18px}
+  .sim-buttons{grid-column:1/-1;display:flex;gap:8px;margin:.4rem 0 0 0}
+  .sim-buttons .sim-btn{flex:1}
+  .sim-algo-row{padding-bottom:.2rem}
+  .sim-algo-chip{font-size:11px;padding:5px 10px}
+  /* 미니 stats 2열 */
+  .mini-stats{grid-template-columns:repeat(2,1fr);gap:8px}
+  .ms-card{padding:.85rem 1rem}
+  .ms-val{font-size:1.55rem}
+  /* 백테스트 표 폰트 약간 키움 */
+  .bt-meta{font-size:11.5px;line-height:1.6}
+  .pick-grid{gap:8px}
+  .pick-card{padding:1rem}
+}
 </style>
 </head>
 <body>
@@ -255,10 +294,10 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
     </div>
   </div>
   <div class="tabs">
-    <div class="tab on" onclick="gotoTab('home',this)">이론별 추천 번호</div>
-    <div class="tab" onclick="gotoTab('sim',this)">번호 시뮬레이터</div>
-    <div class="tab" onclick="gotoTab('stats',this)">번호 통계</div>
-    <div class="tab" onclick="gotoTab('backtest',this)">백테스트 결과</div>
+    <div class="tab on" onclick="gotoTab('home',this)">이론별 추천</div>
+    <div class="tab" onclick="gotoTab('sim',this)">시뮬레이터</div>
+    <div class="tab" onclick="gotoTab('stats',this)">통계</div>
+    <div class="tab" onclick="gotoTab('backtest',this)">백테스트</div>
     <div class="tab" onclick="gotoTab('recent',this)">최근 당첨</div>
   </div>
   <div class="pane on" id="pane-home">
