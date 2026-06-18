@@ -60,10 +60,10 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 .btn-regen-all{background:rgba(212,168,67,.12);border:1px solid rgba(212,168,67,.3);color:var(--gold-lt);padding:9px 20px;border-radius:10px;cursor:pointer;font-size:12px;font-family:'Noto Sans KR',sans-serif;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .btn-regen-all:hover{background:rgba(212,168,67,.22);border-color:rgba(212,168,67,.5)}
 .mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem}
-.ms-card{background:var(--bg1);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem}
+.ms-card{background:var(--bg1);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;text-align:center}
 .ms-lbl{font-family:'Oxanium',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
 .ms-val{font-family:'Oxanium',monospace;font-size:1.75rem;font-weight:800;color:var(--gold);line-height:1}
-.ms-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.ms-sub{font-size:10px;color:var(--text3);margin-top:5px}
 .sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:1.2rem}
 .sec-hd-lbl{font-family:'Oxanium',monospace;font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);white-space:nowrap}
 .sec-hd-line{flex:1;height:1px;background:var(--line)}
@@ -85,7 +85,7 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 .a-det{font-size:9px;font-family:'Oxanium',monospace;padding:2px 7px;border-radius:99px;float:right;margin-left:6px;margin-bottom:4px}
 .det-fixed{background:rgba(251,146,60,.12);color:var(--orange);border:1px solid rgba(251,146,60,.25)}
 .det-rand{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.25)}
-.ball-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ball-row{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
 .ball{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:13.5px;font-weight:700;flex-shrink:0;cursor:default;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.22),0 3px 10px rgba(0,0,0,.45);transition:transform .1s}
 .ball:hover{transform:scale(1.12) translateY(-1px)}
 .ball.ghost{background:var(--bg3);border:1px solid var(--line);animation:ghost-pulse 1.4s infinite}
@@ -203,9 +203,10 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
 .sim-hit-bar.hot{border-color:rgba(212,168,67,.4);background:rgba(212,168,67,.08)}
 .sim-hit-bar.hot .hv{color:var(--gold-lt)}
 .sim-ev{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;margin-top:1rem;display:flex;align-items:center;gap:16px}
-.sim-ev .ev-lbl{font-family:'Oxanium',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
-.sim-ev .ev-val{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;color:var(--gold-lt)}
+.sim-ev .ev-lbl{font-family:'Oxanium',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);text-align:center}
+.sim-ev .ev-val{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;color:var(--gold-lt);text-align:center}
 .sim-ev .ev-detail{font-size:11px;color:var(--text3);margin-left:auto;text-align:right;line-height:1.55}
+.sim-ev>div:first-child{flex:1;text-align:center}
 .sim-note{font-size:10.5px;color:var(--text3);margin-top:1rem;line-height:1.65;padding:8px 12px;border-left:2px solid var(--line2);background:rgba(255,255,255,.02)}
 .sim-error{color:var(--red);font-size:12px;margin-top:0.5rem;padding:8px 12px;border-radius:8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);display:none}
 .sim-error.on{display:block}
@@ -243,15 +244,22 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
   .hero-h1{font-size:2.4rem}
   .hero-sub{font-size:11.5px;margin-bottom:1rem;padding:0 .5rem}
   .next-badge{font-size:10.5px;padding:8px 16px;gap:8px}
-  /* 앙상블: 트로피/타이틀 위 → 볼 6개 가로 정렬 → 재생성 아래 */
+  /* 앙상블: 트로피/타이틀 위(가운데) → 볼 6개 가로 정렬 → 재생성 아래 */
   .ensemble-wrap{margin-bottom:1.5rem}
-  .ensemble-inner{padding:1.2rem 1rem;flex-direction:column;align-items:stretch;gap:1rem}
-  .ensemble-meta{display:flex;align-items:center;gap:.6rem;text-align:left}
-  .ensemble-meta .ensemble-trophy{font-size:1.6rem;margin-bottom:0}
-  .ensemble-meta>div:last-child{flex:1}
-  .ensemble-balls{justify-content:space-between;flex-wrap:nowrap;gap:4px}
+  .ensemble-inner{padding:1.2rem 1rem;flex-direction:column;align-items:stretch;gap:1rem;text-align:center}
+  .ensemble-meta{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+  .ensemble-meta .ensemble-trophy{font-size:1.8rem;margin-bottom:0}
+  .ensemble-meta .ensemble-lbl{margin-top:.2rem}
+  .ensemble-balls{justify-content:center;flex-wrap:nowrap;gap:6px}
   .e-ball{width:42px;height:42px;font-size:14px}
   .btn-regen-all{width:100%}
+  /* 알고리즘 카드 내부 가운데 */
+  .a-card{padding:1.1rem 1rem;text-align:center}
+  .a-card-top{justify-content:center;gap:8px;margin-bottom:8px}
+  .a-icon{margin:0 auto}
+  .a-name,.a-desc,.a-math{text-align:center}
+  .a-math{display:inline-block;border-left:none;border-bottom:2px solid var(--cc);padding:6px 12px;border-radius:8px}
+  .ball-meta{justify-content:center}
   /* 시뮬레이터 입력: 3열 그리드 */
   .sim-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:.9rem}
   .sim-inp{width:100%;height:52px;font-size:18px}
