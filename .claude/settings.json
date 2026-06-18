@@ -5,7 +5,8 @@
       "Bash(git commit -m ' *)",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k,v\\) for k,v in d.items\\(\\) if 'delta' in k.lower\\(\\) or k in ['algo','algorithms']]\")",
       "Bash(python3 -c ' *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(gh workflow *)"
     ]
   }
 }

@@ -60,13 +60,28 @@ jobs:
 
       - name: Commit and push
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add backtest/backtest-summary.json backtest/fidelity-summary.json backtest/stability-summary.json backtest/sweep-summary.json 2>/dev/null || true
-          if git diff --cached --quiet; then
-            echo "변경 없음"
-          else
-            LAST_ROUND=$(node -e "import('./backtest/data-loader.js').then(({loadDraws})=>{const d=loadDraws();console.log(d[d.length-1].no)})")
-            git commit -m "backtest: ${LAST_ROUND}회까지 전체 재계산 (자동)"
-            git push
+          echo "=== 산출물 파일 ==="
+          ls -la backtest/*.json
+          echo "=== git status (커밋 전) ==="
+          git status --short
+          for f in backtest/backtest-summary.json backtest/fidelity-summary.json backtest/stability-summary.json backtest/sweep-summary.json; do
+            if [[ -f "$f" ]]; then
+              git add "$f"
+              echo "add: $f"
+            else
+              echo "::warning::파일 없음: $f"
+            fi
+          done
+          echo "=== git status (add 후) ==="
+          git status --short
+          if [[ -z "$(git diff --cached --name-only)" ]]; then
+            echo "::warning::staged 변경 없음 — 커밋 스킵"
+            exit 0
           fi
+          LAST_ROUND=${{ steps.lastround.outputs.last }}
+          git commit -m "backtest: ${LAST_ROUND}회까지 전체 재계산 (자동)"
+          git push
+          echo "✓ 푸시 완료"
