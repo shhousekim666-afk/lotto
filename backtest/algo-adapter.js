@@ -152,7 +152,7 @@ export function algoDelta(ctx, rng, opts = {}) {
     const mn = Math.min(...d.nums);
     if (mn <= 7) startFreq[mn]++;
   }
-  const startCands = opts.startCands ?? [1, 2, 3, 4, 5];
+  const startCands = opts.startCands ?? [1, 2, 3, 4, 5, 6, 7];
   const startW = startCands.map((n) => Math.max(1, startFreq[n]) ** 2);
   const startNum = startCands[wSample(startW, rng)];
   const nums = [startNum];

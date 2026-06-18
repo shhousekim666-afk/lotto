@@ -556,7 +556,7 @@ function algoDelta(){
   // 시작번호: 최솟값 빈도 top-5 (1~5번) 중 빈도² 가중 샘플
   const startFreq=new Array(8).fill(0);
   DRAWS.forEach(d=>{const mn=Math.min(...d.nums);if(mn<=7)startFreq[mn]++;});
-  const startCands=[1,2,3,4,5];
+  const startCands=[1,2,3,4,5,6,7];
   const startW=startCands.map(n=>Math.max(1,startFreq[n])**2);
   const startNum=startCands[wSample(startW)];
   // 평균 델타 적용 (이론 보존)
@@ -679,7 +679,7 @@ const ALGOS=[
    icon:'🎲',cc:'#fbbf24',cg:'rgba(251,191,36,.1)',cb:'rgba(251,191,36,.22)',fn:algoMonte},
   {id:'delta',  name:'델타 수열',    tag:'수열',   det:'rand',
    desc:'평균 간격 + 시작번호 빈도 가중 샘플',
-   math:'시작 ∈ {1..5} 빈도² 가중 · Δavg=[6.33,6.85,6.29,6.62,6.59]',
+   math:'시작 ∈ {1..7} 빈도² 가중 · Δavg=[6.34,6.84,6.29,6.63,6.58]',
    icon:'📐',cc:'#a78bfa',cg:'rgba(167,139,250,.1)',cb:'rgba(167,139,250,.22)',fn:algoDelta},
   {id:'genetic',name:'유전 알고리즘',tag:'최적화', det:'rand',
    desc:'80세대 120개체 · z-score 적합도 함수',
