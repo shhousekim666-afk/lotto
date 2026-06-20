@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-06-18T14:39:51.800Z",
+    "generatedAt": "2026-06-20T17:01:12.753Z",
     "trainRange": [
       301,
       1100
@@ -10,7 +10,7 @@
       1224
     ],
     "overfitThresholdPct": 10,
-    "elapsedSec": 346.41,
+    "elapsedSec": 353.51,
     "note": "각 조합 회차당 1 run (시드 고정). 알고리즘별 최적은 hold-out 기준. 자동 채택 X, 참고용."
   },
   "algos": {
