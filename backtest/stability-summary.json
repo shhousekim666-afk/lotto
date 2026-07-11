@@ -1,178 +1,16 @@
 {
   "meta": {
-    "generatedAt": "2026-06-20T16:55:19.183Z",
+    "generatedAt": "2026-07-11T15:22:59.958Z",
     "weekRange": [
-      1220,
-      1229
+      1223,
+      1232
     ],
     "weeksTracked": 10,
     "monteSims": 100000,
     "seedConvention": "round=current_max, runIdx=0",
-    "elapsedSec": 4.04
+    "elapsedSec": 3.99
   },
   "weeks": [
-    {
-      "round": 1220,
-      "date": "2026-04-18",
-      "predictions": {
-        "freq": [
-          3,
-          13,
-          18,
-          27,
-          33,
-          37
-        ],
-        "cooccur": [
-          18,
-          30,
-          31,
-          34,
-          38,
-          44
-        ],
-        "monte": [
-          7,
-          12,
-          15,
-          24,
-          33,
-          40
-        ],
-        "delta": [
-          3,
-          9,
-          16,
-          22,
-          29,
-          36
-        ],
-        "genetic": [
-          13,
-          18,
-          27,
-          33,
-          34,
-          43
-        ],
-        "hotcold": [
-          3,
-          6,
-          15,
-          16,
-          27,
-          28
-        ]
-      }
-    },
-    {
-      "round": 1221,
-      "date": "2026-04-25",
-      "predictions": {
-        "freq": [
-          12,
-          14,
-          17,
-          33,
-          34,
-          40
-        ],
-        "cooccur": [
-          7,
-          12,
-          15,
-          24,
-          34,
-          45
-        ],
-        "monte": [
-          7,
-          12,
-          15,
-          24,
-          33,
-          40
-        ],
-        "delta": [
-          5,
-          11,
-          18,
-          24,
-          31,
-          38
-        ],
-        "genetic": [
-          12,
-          13,
-          18,
-          27,
-          34,
-          43
-        ],
-        "hotcold": [
-          1,
-          8,
-          15,
-          23,
-          27,
-          28
-        ]
-      }
-    },
-    {
-      "round": 1222,
-      "date": "2026-05-02",
-      "predictions": {
-        "freq": [
-          3,
-          12,
-          13,
-          17,
-          34,
-          37
-        ],
-        "cooccur": [
-          6,
-          13,
-          18,
-          38,
-          39,
-          45
-        ],
-        "monte": [
-          3,
-          7,
-          12,
-          20,
-          24,
-          27
-        ],
-        "delta": [
-          1,
-          7,
-          14,
-          20,
-          27,
-          34
-        ],
-        "genetic": [
-          12,
-          13,
-          18,
-          19,
-          33,
-          34
-        ],
-        "hotcold": [
-          1,
-          3,
-          15,
-          23,
-          27,
-          28
-        ]
-      }
-    },
     {
       "round": 1223,
       "date": "2026-05-09",
@@ -550,6 +388,168 @@
           45
         ]
       }
+    },
+    {
+      "round": 1230,
+      "date": "2026-06-27",
+      "predictions": {
+        "freq": [
+          3,
+          13,
+          17,
+          18,
+          27,
+          45
+        ],
+        "cooccur": [
+          5,
+          11,
+          13,
+          21,
+          37,
+          39
+        ],
+        "monte": [
+          7,
+          12,
+          20,
+          24,
+          33,
+          40
+        ],
+        "delta": [
+          3,
+          9,
+          16,
+          22,
+          29,
+          36
+        ],
+        "genetic": [
+          12,
+          13,
+          19,
+          27,
+          33,
+          34
+        ],
+        "hotcold": [
+          1,
+          3,
+          8,
+          13,
+          15,
+          16
+        ]
+      }
+    },
+    {
+      "round": 1231,
+      "date": "2026-07-04",
+      "predictions": {
+        "freq": [
+          3,
+          14,
+          17,
+          37,
+          40,
+          45
+        ],
+        "cooccur": [
+          13,
+          18,
+          21,
+          31,
+          34,
+          45
+        ],
+        "monte": [
+          3,
+          12,
+          13,
+          20,
+          33,
+          45
+        ],
+        "delta": [
+          3,
+          9,
+          16,
+          22,
+          29,
+          36
+        ],
+        "genetic": [
+          12,
+          13,
+          27,
+          32,
+          33,
+          34
+        ],
+        "hotcold": [
+          1,
+          3,
+          16,
+          27,
+          28,
+          31
+        ]
+      }
+    },
+    {
+      "round": 1232,
+      "date": "2026-07-11",
+      "predictions": {
+        "freq": [
+          12,
+          17,
+          18,
+          33,
+          34,
+          40
+        ],
+        "cooccur": [
+          3,
+          7,
+          12,
+          24,
+          27,
+          38
+        ],
+        "monte": [
+          3,
+          12,
+          13,
+          15,
+          20,
+          24
+        ],
+        "delta": [
+          5,
+          11,
+          18,
+          24,
+          31,
+          38
+        ],
+        "genetic": [
+          12,
+          13,
+          18,
+          27,
+          34,
+          45
+        ],
+        "hotcold": [
+          3,
+          9,
+          15,
+          16,
+          19,
+          23
+        ]
+      }
     }
   ],
   "stats": {
@@ -557,21 +557,21 @@
       "name": "빈도 분석",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 2.89,
-      "maxChange": 5,
+      "avgChangePerWeek": 2.67,
+      "maxChange": 4,
       "changedWeeks": 9,
-      "avgJaccard": 0.366,
-      "firstVsLastOverlap": 2,
-      "firstVsLastJaccard": 0.2
+      "avgJaccard": 0.396,
+      "firstVsLastOverlap": 3,
+      "firstVsLastJaccard": 0.333
     },
     "cooccur": {
       "name": "공출현 행렬",
       "det": false,
       "transitions": 9,
       "avgChangePerWeek": 3.67,
-      "maxChange": 5,
+      "maxChange": 6,
       "changedWeeks": 9,
-      "avgJaccard": 0.264,
+      "avgJaccard": 0.266,
       "firstVsLastOverlap": 1,
       "firstVsLastJaccard": 0.091
     },
@@ -579,21 +579,21 @@
       "name": "몬테카를로",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 3.22,
+      "avgChangePerWeek": 3.56,
       "maxChange": 6,
-      "changedWeeks": 8,
-      "avgJaccard": 0.363,
-      "firstVsLastOverlap": 1,
-      "firstVsLastJaccard": 0.091
+      "changedWeeks": 9,
+      "avgJaccard": 0.295,
+      "firstVsLastOverlap": 2,
+      "firstVsLastJaccard": 0.2
     },
     "delta": {
       "name": "델타 수열",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 5.33,
+      "avgChangePerWeek": 4.67,
       "maxChange": 6,
-      "changedWeeks": 8,
-      "avgJaccard": 0.111,
+      "changedWeeks": 7,
+      "avgJaccard": 0.222,
       "firstVsLastOverlap": 0,
       "firstVsLastJaccard": 0
     },
@@ -601,23 +601,23 @@
       "name": "유전 알고리즘",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 2.22,
-      "maxChange": 4,
+      "avgChangePerWeek": 2,
+      "maxChange": 3,
       "changedWeeks": 9,
-      "avgJaccard": 0.477,
-      "firstVsLastOverlap": 5,
-      "firstVsLastJaccard": 0.714
+      "avgJaccard": 0.511,
+      "firstVsLastOverlap": 3,
+      "firstVsLastJaccard": 0.333
     },
     "hotcold": {
       "name": "핫/콜드",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 2.67,
-      "maxChange": 4,
+      "avgChangePerWeek": 3.44,
+      "maxChange": 6,
       "changedWeeks": 9,
-      "avgJaccard": 0.407,
-      "firstVsLastOverlap": 2,
-      "firstVsLastJaccard": 0.2
+      "avgJaccard": 0.294,
+      "firstVsLastOverlap": 3,
+      "firstVsLastJaccard": 0.333
     }
   }
 }
