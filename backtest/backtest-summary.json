@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2026-07-11T15:22:45.982Z",
-    "totalDraws": 1232,
+    "generatedAt": "2026-07-19T05:40:33.940Z",
+    "totalDraws": 1233,
     "evalStart": 301,
-    "evalEnd": 1232,
+    "evalEnd": 1233,
     "step": 1,
     "randRuns": 100,
     "monteSims": 10000,
-    "elapsedSec": 5165.03,
+    "elapsedSec": 3937.35,
     "detailFile": "backtest-detail.json"
   },
   "algos": {
@@ -15,24 +15,24 @@
       "algoId": "freq",
       "name": "빈도 분석",
       "det": false,
-      "evalRounds": 932,
-      "hitMean": 0.7783,
-      "hitStd": 0.5222,
+      "evalRounds": 933,
+      "hitMean": 0.7786,
+      "hitStd": 0.522,
       "hitDist": [
         385,
-        384,
+        385,
         136,
         26,
         1,
         0,
         0
       ],
-      "meanBS": 0.166311,
+      "meanBS": 0.166297,
       "meanBSRef": 0.115556,
-      "bss": -0.439227,
+      "bss": -0.439112,
       "bssCI": [
-        -0.452263,
-        -0.426121
+        -0.452098,
+        -0.42598
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -46,11 +46,11 @@
       "algoId": "cooccur",
       "name": "공출현 행렬",
       "det": false,
-      "evalRounds": 932,
-      "hitMean": 0.7838,
-      "hitStd": 0.3197,
+      "evalRounds": 933,
+      "hitMean": 0.7835,
+      "hitStd": 0.3196,
       "hitDist": [
-        357,
+        358,
         405,
         147,
         20,
@@ -58,12 +58,12 @@
         0,
         0
       ],
-      "meanBS": 0.134408,
+      "meanBS": 0.134416,
       "meanBSRef": 0.115556,
-      "bss": -0.163144,
+      "bss": -0.163215,
       "bssCI": [
-        -0.171289,
-        -0.155069
+        -0.17136,
+        -0.155156
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -77,11 +77,11 @@
       "algoId": "monte",
       "name": "몬테카를로",
       "det": false,
-      "evalRounds": 932,
-      "hitMean": 0.7752,
-      "hitStd": 0.3962,
+      "evalRounds": 933,
+      "hitMean": 0.7753,
+      "hitStd": 0.396,
       "hitDist": [
-        393,
+        394,
         375,
         143,
         21,
@@ -89,12 +89,12 @@
         0,
         0
       ],
-      "meanBS": 0.147126,
+      "meanBS": 0.147112,
       "meanBSRef": 0.115556,
-      "bss": -0.27321,
+      "bss": -0.273088,
       "bssCI": [
-        -0.284639,
-        -0.261556
+        -0.284394,
+        -0.261805
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -108,24 +108,24 @@
       "algoId": "delta",
       "name": "델타 수열",
       "det": false,
-      "evalRounds": 932,
-      "hitMean": 0.8052,
-      "hitStd": 0.2282,
+      "evalRounds": 933,
+      "hitMean": 0.8056,
+      "hitStd": 0.2284,
       "hitDist": [
         355,
         403,
-        147,
+        148,
         26,
         1,
         0,
         0
       ],
-      "meanBS": 0.125173,
+      "meanBS": 0.125155,
       "meanBSRef": 0.115556,
-      "bss": -0.083225,
+      "bss": -0.083071,
       "bssCI": [
-        -0.089002,
-        -0.077549
+        -0.088867,
+        -0.077143
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -139,11 +139,11 @@
       "algoId": "genetic",
       "name": "유전 알고리즘",
       "det": false,
-      "evalRounds": 932,
-      "hitMean": 0.7792,
-      "hitStd": 0.5926,
+      "evalRounds": 933,
+      "hitMean": 0.7785,
+      "hitStd": 0.5927,
       "hitDist": [
-        405,
+        406,
         380,
         127,
         19,
@@ -151,12 +151,12 @@
         0,
         0
       ],
-      "meanBS": 0.185937,
+      "meanBS": 0.185975,
       "meanBSRef": 0.115556,
-      "bss": -0.609066,
+      "bss": -0.609397,
       "bssCI": [
-        -0.624138,
-        -0.593781
+        -0.624343,
+        -0.593409
       ],
       "pValue": 0,
       "nullSimCount": 10000,
@@ -170,11 +170,11 @@
       "algoId": "hotcold",
       "name": "핫/콜드",
       "det": false,
-      "evalRounds": 932,
-      "hitMean": 0.8,
-      "hitStd": 0.5185,
+      "evalRounds": 933,
+      "hitMean": 0.7991,
+      "hitStd": 0.5189,
       "hitDist": [
-        360,
+        361,
         384,
         167,
         21,
@@ -182,12 +182,12 @@
         0,
         0
       ],
-      "meanBS": 0.167487,
+      "meanBS": 0.167526,
       "meanBSRef": 0.115556,
-      "bss": -0.449406,
+      "bss": -0.44974,
       "bssCI": [
-        -0.461964,
-        -0.436778
+        -0.462505,
+        -0.437033
       ],
       "pValue": 0,
       "nullSimCount": 10000,
