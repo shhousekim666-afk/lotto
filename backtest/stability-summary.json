@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generatedAt": "2026-08-29T14:58:53.083Z",
+    "generatedAt": "2026-09-05T14:48:40.338Z",
     "weekRange": [
-      1230,
-      1239
+      1231,
+      1240
     ],
     "weeksTracked": 10,
     "monteSims": 100000,
@@ -11,60 +11,6 @@
     "elapsedSec": 3.99
   },
   "weeks": [
-    {
-      "round": 1230,
-      "date": "2026-06-27",
-      "predictions": {
-        "freq": [
-          3,
-          13,
-          17,
-          18,
-          27,
-          45
-        ],
-        "cooccur": [
-          5,
-          11,
-          13,
-          21,
-          37,
-          39
-        ],
-        "monte": [
-          7,
-          12,
-          20,
-          24,
-          33,
-          40
-        ],
-        "delta": [
-          3,
-          9,
-          16,
-          22,
-          29,
-          36
-        ],
-        "genetic": [
-          12,
-          13,
-          19,
-          27,
-          33,
-          34
-        ],
-        "hotcold": [
-          1,
-          3,
-          8,
-          13,
-          15,
-          16
-        ]
-      }
-    },
     {
       "round": 1231,
       "date": "2026-07-04",
@@ -550,6 +496,60 @@
           36
         ]
       }
+    },
+    {
+      "round": 1240,
+      "date": "2026-09-05",
+      "predictions": {
+        "freq": [
+          14,
+          18,
+          27,
+          33,
+          34,
+          45
+        ],
+        "cooccur": [
+          1,
+          3,
+          8,
+          17,
+          27,
+          35
+        ],
+        "monte": [
+          1,
+          3,
+          12,
+          13,
+          20,
+          24
+        ],
+        "delta": [
+          1,
+          7,
+          14,
+          20,
+          27,
+          34
+        ],
+        "genetic": [
+          8,
+          13,
+          18,
+          27,
+          33,
+          34
+        ],
+        "hotcold": [
+          13,
+          15,
+          20,
+          27,
+          28,
+          31
+        ]
+      }
     }
   ],
   "stats": {
@@ -561,30 +561,30 @@
       "maxChange": 4,
       "changedWeeks": 9,
       "avgJaccard": 0.32,
-      "firstVsLastOverlap": 3,
-      "firstVsLastJaccard": 0.333
+      "firstVsLastOverlap": 2,
+      "firstVsLastJaccard": 0.2
     },
     "cooccur": {
       "name": "공출현 행렬",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 4.56,
+      "avgChangePerWeek": 4.78,
       "maxChange": 6,
       "changedWeeks": 9,
-      "avgJaccard": 0.151,
-      "firstVsLastOverlap": 1,
-      "firstVsLastJaccard": 0.091
+      "avgJaccard": 0.128,
+      "firstVsLastOverlap": 0,
+      "firstVsLastJaccard": 0
     },
     "monte": {
       "name": "몬테카를로",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 3.11,
+      "avgChangePerWeek": 3,
       "maxChange": 5,
       "changedWeeks": 9,
-      "avgJaccard": 0.344,
-      "firstVsLastOverlap": 2,
-      "firstVsLastJaccard": 0.2
+      "avgJaccard": 0.363,
+      "firstVsLastOverlap": 4,
+      "firstVsLastJaccard": 0.5
     },
     "delta": {
       "name": "델타 수열",
