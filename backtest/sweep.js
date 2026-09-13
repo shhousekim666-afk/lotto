@@ -1,4 +1,4 @@
-// 하이퍼파라미터 sweep. train(301~1100) / hold-out(1101~1224) 분리 평가.
+// 하이퍼파라미터 sweep. train(301~1100) / 최신 회차까지 hold-out 분리 평가.
 // 결과: backtest/sweep-summary.json (UI fetch용)
 
 import { writeFileSync } from "node:fs";
@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(__dirname, "sweep-summary.json");
 
 const TRAIN_START = 301, TRAIN_END = 1100;
-const HOLD_START = 1101, HOLD_END = 1224;
+const HOLD_START = 1101;
 const OVERFIT_PCT = 10; // hold-out hit이 train 대비 ±10% 초과시 overfitting 의심
 
 // 알고리즘별 paramGrid (data-analyst 권장)
@@ -54,6 +54,7 @@ function evalRange(algoId, algoFn, opts, draws, start, end) {
 
 function main() {
   const draws = loadDraws();
+  const HOLD_END = draws.length;
   const tStart = Date.now();
   const results = {};
 
