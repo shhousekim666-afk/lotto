@@ -5,13 +5,15 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadDraws } from './data-loader.js';
 import { buildBayesianFrequencyModel } from './bayesian-pattern.js';
+import { buildJointPatternModel, generateJointPick } from './joint-pattern.js';
 import { NUMBER_BASELINE } from './probability-baseline.js';
+import { mulberry32, seedFor } from './algo-adapter.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT = resolve(__dirname, 'bayesian-backtest-summary.json');
 
 function parseArgs(argv, total) {
-  const args = { start: Math.max(50, total - 99), end: total, priorStrength: 45 };
+  const args = { start: 301, end: total, priorStrength: 45 };
   for (let i = 2; i < argv.length; i++) {
     const key = argv[i];
     const value = argv[i + 1];
@@ -36,15 +38,21 @@ function main() {
   const args = parseArgs(process.argv, draws.length);
   const end = Math.min(args.end, draws.length);
   const hits = [];
+  const jointHits = [];
   const logLosses = [];
 
   for (let round = args.start; round <= end; round++) {
     const model = buildBayesianFrequencyModel(draws.slice(0, round - 1), {
       priorStrength: args.priorStrength,
     });
+    const jointModel = buildJointPatternModel(draws.slice(0, round - 1), {
+      priorStrength: args.priorStrength,
+    });
     const actual = new Set(draws[round - 1].nums);
     const prediction = model.topNumbers.slice(0, 6).map((item) => item.number);
+    const jointPrediction = generateJointPick(jointModel, mulberry32(seedFor('joint-pattern', round, 0)), 3000).numbers;
     const hitCount = prediction.filter((number) => actual.has(number)).length;
+    const jointHitCount = jointPrediction.filter((number) => actual.has(number)).length;
     let modelLoss = 0;
     let baselineLoss = 0;
     for (const item of model.numbers) {
@@ -52,14 +60,17 @@ function main() {
       baselineLoss += binaryLogLoss(NUMBER_BASELINE, actual.has(item.number));
     }
     hits.push(hitCount);
+    jointHits.push(jointHitCount);
     logLosses.push({ model: modelLoss / 45, baseline: baselineLoss / 45 });
   }
 
   const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
   const hitMean = mean(hits);
+  const jointHitMean = mean(jointHits);
   const modelLogLoss = mean(logLosses.map((value) => value.model));
   const baselineLogLoss = mean(logLosses.map((value) => value.baseline));
   const hitDistribution = Array.from({ length: 7 }, (_, count) => hits.filter((hit) => hit === count).length);
+  const jointHitDistribution = Array.from({ length: 7 }, (_, count) => jointHits.filter((hit) => hit === count).length);
   const result = {
     meta: {
       generatedAt: new Date().toISOString(),
@@ -74,6 +85,12 @@ function main() {
       hitMean: +hitMean.toFixed(4),
       randomExpectedHit: +(6 * NUMBER_BASELINE).toFixed(4),
       hitDistribution,
+      joint: {
+        name: '빈도+공출현 공동분포 모델',
+        hitMean: +jointHitMean.toFixed(4),
+        randomExpectedHit: +(6 * NUMBER_BASELINE).toFixed(4),
+        hitDistribution: jointHitDistribution,
+      },
       meanLogLoss: +modelLogLoss.toFixed(6),
       baselineLogLoss: +baselineLogLoss.toFixed(6),
       logLossSkill: +(1 - modelLogLoss / baselineLogLoss).toFixed(6),
