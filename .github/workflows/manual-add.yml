@@ -27,8 +27,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Add round
         run: python add_round.py "${{ inputs.data }}"
+
+      - name: Validate data
+        run: node backtest/validate-data.js
 
       - name: Commit and push
         run: |

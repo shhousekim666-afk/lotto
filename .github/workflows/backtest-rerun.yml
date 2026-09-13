@@ -36,6 +36,7 @@ jobs:
       - name: Determine last round
         id: lastround
         run: |
+          node backtest/validate-data.js
           LAST=$(node -e "import('./backtest/data-loader.js').then(({loadDraws})=>{const d=loadDraws();console.log(d[d.length-1].no)})")
           echo "last=$LAST" >> $GITHUB_OUTPUT
           echo "마지막 회차: $LAST"
