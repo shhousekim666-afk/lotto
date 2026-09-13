@@ -58,6 +58,9 @@ jobs:
         if: ${{ inputs.run_sweep }}
         run: node backtest/sweep.js
 
+      - name: Run Bayesian model backtest
+        run: node backtest/bayesian-backtest.js
+
       - name: Commit and push
         run: |
           set -euo pipefail
@@ -67,7 +70,7 @@ jobs:
           ls -la backtest/*.json
           echo "=== git status (커밋 전) ==="
           git status --short
-          for f in backtest/backtest-summary.json backtest/fidelity-summary.json backtest/stability-summary.json backtest/sweep-summary.json; do
+          for f in backtest/backtest-summary.json backtest/fidelity-summary.json backtest/stability-summary.json backtest/sweep-summary.json backtest/bayesian-backtest-summary.json; do
             if [[ -f "$f" ]]; then
               git add "$f"
               echo "add: $f"

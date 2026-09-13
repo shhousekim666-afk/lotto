@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-13T02:41:15.073Z",
+    "totalDraws": 1232,
+    "evalStart": 1133,
+    "evalEnd": 1232,
+    "evalRounds": 100,
+    "priorStrength": 45
+  },
+  "model": {
+    "name": "베이지안 빈도 모델",
+    "hitMean": 0.78,
+    "randomExpectedHit": 0.8,
+    "hitDistribution": [
+      41,
+      43,
+      13,
+      3,
+      0,
+      0,
+      0
+    ],
+    "meanLogLoss": 0.393269,
+    "baselineLogLoss": 0.392674,
+    "logLossSkill": -0.001514
+  }
+}
