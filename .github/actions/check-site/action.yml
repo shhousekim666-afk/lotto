@@ -3,11 +3,11 @@ description: Check data, results, and browser initialization before publishing
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v7.0.0
       with:
         node-version: '22'
         cache: npm
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v7.0.0
       with:
         python-version: '3.11'
     - run: npm ci
