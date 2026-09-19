@@ -663,6 +663,7 @@ function regenAll(){
 // ━━━ 통계 ━━━
 function initStats(){
   const maxF=Math.max(...FREQ.slice(1)),minF=Math.min(...FREQ.slice(1));
+  const baseline=baselineSummary();
   document.getElementById('miniStats').innerHTML=`
     <div class="ms-card"><div class="ms-lbl">총 회차</div><div class="ms-val">${N}</div><div class="ms-sub">${DRAWS[0].date} ~ ${DRAWS[N-1].date}</div></div>
     <div class="ms-card"><div class="ms-lbl">최다 출현</div><div class="ms-val">${FREQ.indexOf(maxF)}번</div><div class="ms-sub">${maxF}회 출현</div></div>
@@ -688,7 +689,6 @@ function initStats(){
       <div class="utility-balls">${jointPick.numbers.map(number=>mkBall(number,'sm')).join('')}<span class="utility-metric">상대점수 <b>${jointPick.score.toFixed(2)}</b></span></div>
     </div>
   `);
-  const baseline=baselineSummary();
   document.getElementById('probBaseline').innerHTML=`
     <div class="prob-baseline-item">
       <div class="prob-baseline-lbl">공정 추첨 기준</div>
