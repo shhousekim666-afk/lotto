@@ -1,30 +1,28 @@
 {
   "meta": {
-    "generatedAt": "2026-09-12T14:31:07.903Z",
-    "totalDraws": 1241,
+    "evaluationVersion": 2,
+    "significanceMethod": "paired-centered-bootstrap-one-sided",
+    "hitStdDefinition": "individual-ticket",
+    "generatedAt": "2026-09-19T13:02:46.501Z",
+    "totalDraws": 1242,
     "evalStart": 301,
-    "evalEnd": 1241,
+    "evalEnd": 1242,
     "step": 1,
     "randRuns": 100,
     "monteSims": 10000,
-    "elapsedSec": 4938.89,
-    "detailFile": "backtest-detail.json",
-    "evaluationVersion": 2,
-    "significanceMethod": "paired-centered-bootstrap-one-sided",
-    "inferenceCorrectedAt": "2026-09-19T08:46:08.203Z",
-    "hitStdDefinition": "round-mean",
-    "correctionNote": "기존 적중 수·BSS·CI 보존. BSS가 모두 음수이므로 개선에 대한 단측 p=1로 교정. 예측을 재실행한 결과는 아닙니다."
+    "elapsedSec": 3648,
+    "detailFile": "backtest-detail.json"
   },
   "algos": {
     "freq": {
       "algoId": "freq",
       "name": "빈도 분석",
       "det": false,
-      "evalRounds": 941,
-      "hitMean": 0.7784,
-      "hitStd": 0.5224,
+      "evalRounds": 942,
+      "hitMean": 0.7776,
+      "hitStd": 0.7831,
       "hitDist": [
-        388,
+        389,
         388,
         138,
         26,
@@ -32,12 +30,12 @@
         0,
         0
       ],
-      "meanBS": 0.166303,
+      "meanBS": 0.166339,
       "meanBSRef": 0.115556,
-      "bss": -0.439158,
+      "bss": -0.439473,
       "bssCI": [
-        -0.452138,
-        -0.426509
+        -0.45211,
+        -0.426513
       ],
       "pValue": 1,
       "nullSimCount": 0,
@@ -51,11 +49,11 @@
       "algoId": "cooccur",
       "name": "공출현 행렬",
       "det": false,
-      "evalRounds": 941,
-      "hitMean": 0.7846,
-      "hitStd": 0.3193,
+      "evalRounds": 942,
+      "hitMean": 0.7841,
+      "hitStd": 0.7843,
       "hitDist": [
-        361,
+        362,
         408,
         149,
         20,
@@ -63,12 +61,12 @@
         0,
         0
       ],
-      "meanBS": 0.134342,
+      "meanBS": 0.134362,
       "meanBSRef": 0.115556,
-      "bss": -0.162573,
+      "bss": -0.162746,
       "bssCI": [
-        -0.171015,
-        -0.154269
+        -0.171057,
+        -0.154514
       ],
       "pValue": 1,
       "nullSimCount": 0,
@@ -82,11 +80,11 @@
       "algoId": "monte",
       "name": "몬테카를로",
       "det": false,
-      "evalRounds": 941,
-      "hitMean": 0.7764,
-      "hitStd": 0.3951,
+      "evalRounds": 942,
+      "hitMean": 0.7759,
+      "hitStd": 0.7751,
       "hitDist": [
-        395,
+        396,
         379,
         146,
         21,
@@ -94,12 +92,12 @@
         0,
         0
       ],
-      "meanBS": 0.146985,
+      "meanBS": 0.146998,
       "meanBSRef": 0.115556,
-      "bss": -0.271989,
+      "bss": -0.2721,
       "bssCI": [
-        -0.283258,
-        -0.26046
+        -0.283462,
+        -0.260831
       ],
       "pValue": 1,
       "nullSimCount": 0,
@@ -113,24 +111,24 @@
       "algoId": "delta",
       "name": "델타 수열",
       "det": false,
-      "evalRounds": 941,
-      "hitMean": 0.8053,
-      "hitStd": 0.2281,
+      "evalRounds": 942,
+      "hitMean": 0.8052,
+      "hitStd": 0.7817,
       "hitDist": [
         357,
-        408,
+        409,
         149,
         26,
         1,
         0,
         0
       ],
-      "meanBS": 0.125167,
+      "meanBS": 0.125173,
       "meanBSRef": 0.115556,
-      "bss": -0.083172,
+      "bss": -0.083225,
       "bssCI": [
-        -0.088865,
-        -0.077369
+        -0.089066,
+        -0.07746
       ],
       "pValue": 1,
       "nullSimCount": 0,
@@ -144,11 +142,11 @@
       "algoId": "genetic",
       "name": "유전 알고리즘",
       "det": false,
-      "evalRounds": 941,
-      "hitMean": 0.7818,
-      "hitStd": 0.5951,
+      "evalRounds": 942,
+      "hitMean": 0.7811,
+      "hitStd": 0.7709,
       "hitDist": [
-        408,
+        409,
         384,
         128,
         20,
@@ -156,12 +154,12 @@
         0,
         0
       ],
-      "meanBS": 0.185881,
+      "meanBS": 0.185922,
       "meanBSRef": 0.115556,
-      "bss": -0.608586,
+      "bss": -0.608942,
       "bssCI": [
-        -0.623897,
-        -0.593175
+        -0.624266,
+        -0.593577
       ],
       "pValue": 1,
       "nullSimCount": 0,
@@ -175,24 +173,24 @@
       "algoId": "hotcold",
       "name": "핫/콜드",
       "det": false,
-      "evalRounds": 941,
-      "hitMean": 0.7991,
-      "hitStd": 0.5193,
+      "evalRounds": 942,
+      "hitMean": 0.7994,
+      "hitStd": 0.7802,
       "hitDist": [
         363,
-        388,
+        389,
         168,
         22,
         0,
         0,
         0
       ],
-      "meanBS": 0.167523,
+      "meanBS": 0.167509,
       "meanBSRef": 0.115556,
-      "bss": -0.449719,
+      "bss": -0.449597,
       "bssCI": [
-        -0.462643,
-        -0.436839
+        -0.462352,
+        -0.436934
       ],
       "pValue": 1,
       "nullSimCount": 0,
