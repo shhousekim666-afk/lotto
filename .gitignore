@@ -1,5 +1,8 @@
 update_lotto.log
 .DS_Store
+node_modules/
+__pycache__/
+site/
 
 # 백테스트 산출물
 backtest/checkpoints/

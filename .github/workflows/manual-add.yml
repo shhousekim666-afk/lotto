@@ -10,15 +10,20 @@ on:
       rerun_backtest:
         description: "회차 추가 후 백테스트 재계산도 실행 (~80분 소요)"
         required: false
-        default: false
+        default: true
         type: boolean
 
 permissions:
   contents: write
   actions: write
 
+concurrency:
+  group: lotto-data-write
+  cancel-in-progress: false
+
 jobs:
   add:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,13 +34,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Add round
-        run: python add_round.py "${{ inputs.data }}"
+        env:
+          ROUND_DATA: ${{ inputs.data }}
+        run: python add_round.py "$ROUND_DATA"
 
-      - name: Validate data
-        run: node backtest/validate-data.js
+      - uses: ./.github/actions/check-site
 
       - name: Commit and push
         run: |
@@ -43,7 +49,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html
-            git commit -m "data: ${{ inputs.data }} 수동 추가"
+            git commit -m "data: 당첨 회차 수동 추가 (검증 완료)"
             git push
           else
             echo "변경 없음"
@@ -54,5 +60,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh workflow run backtest-rerun.yml -R ${{ github.repository }}
+          gh workflow run backtest-rerun.yml --ref main -R "$GITHUB_REPOSITORY"
           echo "::notice::백테스트 재계산 워크플로 트리거됨 (~80분 후 완료)"

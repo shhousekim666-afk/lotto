@@ -10,7 +10,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadDraws } from "./data-loader.js";
 import { ALGOS, buildContext, mulberry32, seedFor } from "./algo-adapter.js";
-import { applyBonferroni, summarize } from "./evaluator.js";
+import { applyBonferroni, summarize, EVALUATION_VERSION } from "./evaluator.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CKPT_DIR = resolve(__dirname, "checkpoints");
@@ -64,6 +64,11 @@ function main() {
   const draws = loadDraws();
   const start = args.start ?? draws.length - 99;
   const end = args.end ?? draws.length;
+  for (const [key, value] of Object.entries({ start, end, step: args.step, rand: args.rand, monteSims: args.monteSims })) {
+    if (!Number.isSafeInteger(value) || value < 1) throw new Error(`잘못된 실행 값: ${key}`);
+  }
+  if (start < 51 || end < start || end > draws.length || args.rand > 1000 || args.monteSims > 1000000) throw new Error('지원하지 않는 실행 범위');
+  if (args.resume) throw new Error('설정이 다른 체크포인트 혼합을 막기 위해 새로 실행하세요.');
   const evalRounds = [];
   for (let r = start; r <= end; r += args.step) evalRounds.push(r);
 
@@ -138,7 +143,6 @@ function main() {
 
   // 평가
   process.stderr.write("\n평가 계산 중...\n");
-  const nullCache = {}; // 알고리즘 간 null 분포 재사용
   const summaries = [];
   for (const algo of ALGOS) {
     const t0 = Date.now();
@@ -149,7 +153,6 @@ function main() {
       hits: acc[algo.id].hits,
       details: acc[algo.id].details,
       randRuns: algo.det ? 1 : args.rand,
-      nullCache,
     });
     summaries.push(s);
     process.stderr.write(`  ${algo.id}: bss=${s.bss}, p=${s.pValue} (${((Date.now() - t0) / 1000).toFixed(1)}s)\n`);
@@ -163,6 +166,9 @@ function main() {
   for (const s of summaries) algosObj[s.algoId] = s;
   const summary = {
     meta: {
+      evaluationVersion: EVALUATION_VERSION,
+      significanceMethod: 'paired-centered-bootstrap-one-sided',
+      hitStdDefinition: 'individual-ticket',
       generatedAt: new Date().toISOString(),
       totalDraws: draws.length,
       evalStart: start,

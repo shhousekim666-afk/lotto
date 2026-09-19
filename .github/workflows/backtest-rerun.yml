@@ -22,8 +22,13 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: lotto-data-write
+  cancel-in-progress: false
+
 jobs:
   rerun:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
@@ -31,7 +36,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Determine last round
         id: lastround
@@ -42,10 +47,13 @@ jobs:
           echo "마지막 회차: $LAST"
 
       - name: Run full backtest
+        env:
+          RAND_RUNS: ${{ inputs.rand_runs }}
+          MONTE_SIMS: ${{ inputs.monte_sims }}
         run: |
           node backtest/runner.js \
             --start 301 --end ${{ steps.lastround.outputs.last }} \
-            --step 1 --rand ${{ inputs.rand_runs }} --monte-sims ${{ inputs.monte_sims }} \
+            --step 1 --rand "$RAND_RUNS" --monte-sims "$MONTE_SIMS" \
             --out-summary backtest/backtest-summary.json \
             --out-detail backtest/backtest-detail.json
 
@@ -62,6 +70,18 @@ jobs:
       - name: Run Bayesian model backtest
         run: node backtest/bayesian-backtest.js
 
+      - uses: ./.github/actions/check-site
+
+      - name: Require current results
+        env:
+          RUN_SWEEP: ${{ inputs.run_sweep }}
+        run: |
+          if [[ "$RUN_SWEEP" == "true" ]]; then
+            node backtest/validate-results.js --current
+          else
+            node backtest/validate-results.js --current --allow-stale-sweep
+          fi
+
       - name: Commit and push
         run: |
           set -euo pipefail
@@ -76,7 +96,8 @@ jobs:
               git add "$f"
               echo "add: $f"
             else
-              echo "::warning::파일 없음: $f"
+              echo "::error::파일 없음: $f"
+              exit 1
             fi
           done
           echo "=== git status (add 후) ==="

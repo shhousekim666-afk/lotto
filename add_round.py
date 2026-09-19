@@ -6,6 +6,7 @@
   python add_round.py "1225,2026-05-23,1,2,3,4,5,6,7"
 """
 import re
+import json
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -25,6 +26,8 @@ def parse_input(raw: str) -> dict:
     rnd = int(parts[0])
     date = parts[1]
     datetime.strptime(date, "%Y-%m-%d")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        raise ValueError("날짜는 YYYY-MM-DD 형식이어야 합니다.")
     nums = [int(x) for x in parts[2:8]]
     bonus = int(parts[8])
     all_nums = nums + [bonus]
@@ -47,13 +50,20 @@ def main():
         print("RAW array not found", file=sys.stderr)
         sys.exit(1)
 
-    existing = {int(m.group(1)) for m in re.finditer(r"\[(\d+),", raw_match.group(1))}
+    rows = json.loads("[" + raw_match.group(1) + "]")
+    existing = {r[0] for r in rows}
     last_round = max(existing)
     if row["no"] in existing:
+        expected = [row["no"], row["date"], *row["nums"], row["bonus"]]
+        if next(r for r in rows if r[0] == row["no"]) != expected:
+            raise ValueError("기존 회차와 다른 번호입니다. 기존 데이터를 확인하세요.")
         print(f"{row['no']}회 이미 존재. 종료.")
         return
     if row["no"] != last_round + 1:
-        print(f"경고: 마지막 {last_round}회 다음은 {last_round + 1}회인데 {row['no']}회 입력됨", file=sys.stderr)
+        raise ValueError(f"다음 회차는 {last_round + 1}회여야 합니다.")
+    last_date = datetime.strptime(rows[-1][1], "%Y-%m-%d")
+    if datetime.strptime(row["date"], "%Y-%m-%d") != last_date + timedelta(days=7):
+        raise ValueError("추첨일은 마지막 회차의 7일 후여야 합니다.")
 
     addition = f",[{row['no']},\"{row['date']}\",{','.join(str(x) for x in row['nums'])},{row['bonus']}]"
     text = text[: raw_match.end() - 2] + addition + text[raw_match.end() - 2 :]

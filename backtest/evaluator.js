@@ -4,6 +4,8 @@
 const NUMS = 45; // 1~45
 const PICKS = 6;
 const REF_P = PICKS / NUMS; // 6/45 무작위 기준 확률
+import { mulberry32, seedFor } from './algo-adapter.js';
+export const EVALUATION_VERSION = 2;
 
 // 번호 집합 → 45-dim binary indicator (1-index 기준, [0] 미사용)
 function toIndicator(numbers) {
@@ -56,43 +58,30 @@ export function computeBSS({ bs, bsRef, nBoot = 10000, rng = Math.random }) {
   return { bss, meanBS, meanBSRef, ciLower, ciUpper };
 }
 
-// Null 분포: 각 시뮬에서 회차마다 무작위 6개 indicator 생성 → 전체 BSS 산출.
-// 관측 BSS의 단측 p-value 반환.
-export function computeNullPValue({ actualVecs, observedBSS, nSim = 10000, rng = Math.random }) {
-  const n = actualVecs.length;
-  const ref = new Float64Array(NUMS).fill(REF_P);
-  const refMeanBS = actualVecs.reduce((s, av) => s + brierMSE(ref, av), 0) / n;
-
-  let geCount = 0;
-  const all = Array.from({ length: NUMS }, (_, i) => i);
-  const nullDist = new Float64Array(nSim);
-
+// 회차별 짝지은 손실 차이를 중심화한 부트스트랩 근사 검정.
+// 반복 추천의 평균 확률을 그대로 평가하며 반복 횟수를 독립 표본으로 세지 않는다.
+export function computeNullPValue({ bs, bsRef, nSim = 10000, rng = Math.random }) {
+  if (!bs?.length || bs.length !== bsRef?.length || !Number.isInteger(nSim) || nSim < 1) throw new Error('검정 입력 오류');
+  const differences = Array.from(bs, (loss, i) => bsRef[i] - loss);
+  if (differences.some(x => !Number.isFinite(x))) throw new Error('손실은 유한수여야 합니다.');
+  const observed = differences.reduce((a, b) => a + b, 0) / differences.length;
+  // 균등 확률보다 손실이 작다는 단측 검정. 개선이 없으면 보수적으로 p=1.
+  if (observed <= 1e-14) return { pValue: 1, simulations: 0 };
+  const centered = differences.map(x => x - observed);
+  let ge = 0;
   for (let s = 0; s < nSim; s++) {
-    let totalBS = 0;
-    for (let r = 0; r < n; r++) {
-      // 무작위 6개 인덱스 (Fisher-Yates 부분)
-      const pool = [...all];
-      const pv = new Float64Array(NUMS);
-      for (let k = 0; k < PICKS; k++) {
-        const j = k + ((rng() * (NUMS - k)) | 0);
-        [pool[k], pool[j]] = [pool[j], pool[k]];
-        pv[pool[k]] = 1;
-      }
-      totalBS += brierMSE(pv, actualVecs[r]);
-    }
-    const nullBSS = 1 - totalBS / n / refMeanBS;
-    nullDist[s] = nullBSS;
-    if (nullBSS >= observedBSS) geCount++;
+    let total = 0;
+    for (let i = 0; i < centered.length; i++) total += centered[Math.floor(rng() * centered.length)];
+    if (total / centered.length >= observed - 1e-14) ge++;
   }
-
-  return { pValue: geCount / nSim, nullDist };
+  return { pValue: (ge + 1) / (nSim + 1), simulations: nSim };
 }
 
 // 알고리즘별 종합 요약: details에서 predicted/actual을 추출하여 모든 메트릭 산출
-export function summarize({ algoId, name, det, hits, details, randRuns, nullCache, opts = {} }) {
+export function summarize({ algoId, name, det, hits, details, randRuns, opts = {} }) {
   const evalRounds = hits.length;
   const hitMean = hits.reduce((a, b) => a + b, 0) / evalRounds;
-  const variance = hits.reduce((a, b) => a + (b - hitMean) ** 2, 0) / evalRounds;
+  const variance = details.reduce((a, b) => a + (b.hitCount - hitMean) ** 2, 0) / details.length;
   const hitStd = Math.sqrt(variance);
   const hitDist = new Array(7).fill(0);
 
@@ -129,26 +118,14 @@ export function summarize({ algoId, name, det, hits, details, randRuns, nullCach
     bs,
     bsRef,
     nBoot: opts.nBoot ?? 10000,
+    rng: mulberry32(seedFor(algoId, rounds[0], 101)),
   });
 
-  // null 분포는 회차별 actualVecs에만 의존 → 알고리즘 간 공유 가능 (nullCache)
-  // 캐시: nullDist 계산해두고 모든 알고리즘이 재사용. p-value는 algoBSS 따라 다름.
-  let pValue, nSim;
-  if (nullCache && nullCache.nullDist) {
-    let ge = 0;
-    for (const v of nullCache.nullDist) if (v >= bss) ge++;
-    pValue = ge / nullCache.nullDist.length;
-    nSim = nullCache.nullDist.length;
-  } else {
-    const { pValue: pv, nullDist } = computeNullPValue({
-      actualVecs,
-      observedBSS: bss,
-      nSim: opts.nSim ?? 10000,
-    });
-    pValue = pv;
-    nSim = nullDist.length;
-    if (nullCache) nullCache.nullDist = nullDist;
-  }
+  // 각 알고리즘의 실제 손실 차이로 검정하므로 null 분포를 공유하지 않는다.
+  const { pValue, simulations: nSim } = computeNullPValue({
+    bs, bsRef, nSim: opts.nSim ?? 10000,
+    rng: mulberry32(seedFor(algoId, rounds[0], 102)),
+  });
 
   return {
     algoId,
@@ -174,7 +151,7 @@ export function applyBonferroni(summaries, alpha = 0.05) {
   const alphaAdj = alpha / k;
   for (const s of summaries) {
     s.pValueBonferroni = Math.min(1, +(s.pValue * k).toFixed(6));
-    s.isSignificant = s.pValueBonferroni < alpha;
+    s.isSignificant = s.bss > 0 && s.pValueBonferroni < alpha;
     s.bonferroniAlpha = +alphaAdj.toFixed(6);
   }
   // BSS 순위

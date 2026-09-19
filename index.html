@@ -426,9 +426,9 @@ main{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:2.5rem 1
         <div class="bt-loading">백테스트 결과 로딩 중...</div>
       </div>
       <div class="bt-honest">
-        <b>해석 안내</b> · 평균 hit은 6개 알고리즘 모두 무작위 기대값(0.800)과 통계적으로 구별되지 않습니다.
-        BSS 유의성(✓)은 rand 알고리즘의 100회 반복 평균이 평균확률 baseline에 더 가까워졌다는 통계적 특성이지
-        실제 예측력 우위가 아닙니다. 로또는 IID(독립 균등 시행)이며 과거 데이터로 미래 추첨을 예측할 수학적 근거는 없습니다.
+        <b>해석 안내</b> · BSS는 번호별 균등 확률(6/45) 대비 확률 예측의 오차 개선율입니다.
+        양수일 때만 개선이며, 유의성은 회차별 손실 차이의 단측 부트스트랩 근사 검정에 다중비교 보정을 적용합니다.
+        유의하지 않다는 결과가 두 방법의 동등함을 입증하지는 않습니다. 회차 간 의존성과 반복적인 모델 탐색은 별도 검토가 필요합니다.
       </div>
     </div>
     <div class="bt-card">
@@ -512,8 +512,6 @@ const RAW = [
 // ━━━ 파싱 ━━━
 const DRAWS = RAW.map(r=>({no:r[0],date:r[1],nums:[r[2],r[3],r[4],r[5],r[6],r[7]],bonus:r[8]}));
 const N = DRAWS.length;
-const BAYES_MODEL = buildBayesianFrequencyModel(DRAWS);
-const JOINT_MODEL = buildJointPatternModel(DRAWS);
 
 // ━━━ 단일 진실 소스: backtest/algo-adapter.js의 buildContext 사용 ━━━
 const CTX = buildContext(DRAWS);
@@ -649,14 +647,19 @@ function regenOne(id){
   const c=document.getElementById('br-'+id);
   if(c)c.innerHTML=Array(6).fill('<div class="ball ghost"></div>').join('');
   const m=document.getElementById('bm-'+id);if(m)m.innerHTML='';
-  setTimeout(()=>setNums('br-'+id,a.fn(),'bm-'+id),130);
+  setTimeout(()=>runSection(a.name,()=>setNums('br-'+id,a.fn(),'bm-'+id)),130);
 }
 function regenAll(){
   ghostAll();
   setTimeout(()=>{
-    const results=ALGOS.map(a=>a.fn());
-    setEBalls(algoEnsemble(results));
-    ALGOS.forEach((a,i)=>setTimeout(()=>setNums('br-'+a.id,results[i],'bm-'+a.id),i*90));
+    const results=[];
+    ALGOS.forEach(a=>runSection(a.name,()=>{
+      const nums=a.fn(); results.push(nums);
+      setNums('br-'+a.id,nums,'bm-'+a.id);
+    }));
+    runSection('종합 추천',()=>{if(results.length)setEBalls(algoEnsemble(results));});
+    runSection('베이지안 추천',renderBayesianPick);
+    runSection('분산 추천',renderUtilityPick);
   },180);
 }
 
@@ -670,10 +673,19 @@ function initStats(){
     <div class="ms-card"><div class="ms-lbl">번호합 평균</div><div class="ms-val">${AVG_SUM.toFixed(1)}</div><div class="ms-sub">σ = ${STD_SUM.toFixed(1)}</div></div>
     <div class="ms-card"><div class="ms-lbl">홀수 평균</div><div class="ms-val">${AVG_ODD.toFixed(2)}</div><div class="ms-sub">σ = ${STD_ODD.toFixed(3)}</div></div>
   `;
-  const bayesTop=BAYES_MODEL.topNumbers.slice(0,6);
-  const jointPick=generateJointPick(JOINT_MODEL,Math.random,3000);
-  document.getElementById('probBaseline').insertAdjacentHTML('afterend',`
-    <div class="bayes-card" id="bayesCard">
+  document.getElementById('probBaseline').innerHTML=`
+    <div class="prob-baseline-item"><div class="prob-baseline-lbl">공정 추첨 기준</div><div class="prob-baseline-val">번호당 ${(baseline.numberProbability*100).toFixed(2)}%</div><div class="prob-baseline-note">다음 회차에 특정 번호가 포함될 확률</div></div>
+    <div class="prob-baseline-item"><div class="prob-baseline-lbl">조합당 1등 확률</div><div class="prob-baseline-val">1 / ${baseline.combinationCount.toLocaleString()}</div><div class="prob-baseline-note">모든 6개 조합에 동일하게 적용</div></div>
+    <div class="prob-baseline-item"><div class="prob-baseline-lbl">추천 해석</div><div class="prob-baseline-val">모델 추정·상대점수</div><div class="prob-baseline-note">상대점수는 당첨확률이 아닙니다</div></div>`;
+  renderStatistics();
+}
+function renderBayesianPick(){
+  const baseline=baselineSummary();
+  const bayesTop=buildBayesianFrequencyModel(DRAWS).topNumbers.slice(0,6);
+  const jointPick=generateJointPick(buildJointPatternModel(DRAWS),Math.random,3000);
+  let card=document.getElementById('bayesCard');
+  if(!card){card=document.createElement('div');card.id='bayesCard';card.className='bayes-card';document.getElementById('probBaseline').after(card);}
+  card.innerHTML=`
       <div class="sec-hd" style="margin-bottom:.7rem">
         <div class="sec-hd-lbl">베이지안 패턴 모델</div><div class="sec-hd-line"></div>
       </div>
@@ -685,28 +697,12 @@ function initStats(){
       <div class="bayes-grid">
         ${bayesTop.map(item=>`<div class="bayes-item" title="95% 근사 범위 ${(item.interval[0]*100).toFixed(2)}% ~ ${(item.interval[1]*100).toFixed(2)}%"><div class="bayes-number">${item.number}</div><div class="bayes-prob">${(item.probability*100).toFixed(2)}%</div><div class="bayes-index">기준 ×${item.relativeIndex.toFixed(2)}</div></div>`).join('')}
       </div>
-      <div class="bayes-intro" style="margin:1rem 0 .4rem">번호 간 공출현까지 결합한 공동분포 후보</div>
+      <div class="bayes-intro" style="margin:1rem 0 .4rem">빈도·공출현 결합 점수 후보 (정규화된 조합 확률이 아님)</div>
       <div class="utility-balls">${jointPick.numbers.map(number=>mkBall(number,'sm')).join('')}<span class="utility-metric">상대점수 <b>${jointPick.score.toFixed(2)}</b></span></div>
-    </div>
-  `);
-  document.getElementById('probBaseline').innerHTML=`
-    <div class="prob-baseline-item">
-      <div class="prob-baseline-lbl">공정 추첨 기준</div>
-      <div class="prob-baseline-val">번호당 ${(baseline.numberProbability*100).toFixed(2)}%</div>
-      <div class="prob-baseline-note">다음 회차에 특정 번호가 포함될 확률</div>
-    </div>
-    <div class="prob-baseline-item">
-      <div class="prob-baseline-lbl">조합당 실제 확률</div>
-      <div class="prob-baseline-val">1 / ${baseline.combinationCount.toLocaleString()}</div>
-      <div class="prob-baseline-note">모든 6개 조합에 동일하게 적용</div>
-    </div>
-    <div class="prob-baseline-item">
-      <div class="prob-baseline-lbl">추천 해석</div>
-      <div class="prob-baseline-val">모델 상대확률</div>
-      <div class="prob-baseline-note">이후 모델 결과는 이 기준과 비교해 표시</div>
-    </div>
   `;
-  renderUtilityPick();
+}
+function renderStatistics(){
+  const maxF=Math.max(...FREQ.slice(1));
   const fg=document.getElementById('freqGrid');fg.innerHTML='';
   for(let n=1;n<=45;n++){
     const pct=Math.round(FREQ[n]/maxF*100);
@@ -732,13 +728,13 @@ function renderUtilityPick(){
   if(!card){card=document.createElement('div');card.id='utilityCard';document.getElementById('probBaseline').after(card);}
   card.className='utility-card';
   card.innerHTML=`
-    <div class="sec-hd" style="margin-bottom:.7rem"><div class="sec-hd-lbl">기대값·게임이론 전략</div><div class="sec-hd-line"></div></div>
-    <div class="utility-intro">모든 조합의 당첨확률은 같다는 전제에서, 사람들이 고르기 쉬운 패턴을 피하는 전략입니다. 당첨확률을 높이지 않으며 당첨 시 상금을 나눌 가능성을 낮추는 목적입니다.</div>
-    <div class="utility-result"><div class="utility-balls">${pick.numbers.map(number=>mkBall(number,'sm')).join('')}</div><div class="utility-metric">공동당첨 위험 지수 <b>${pick.crowdScore.toFixed(1)}</b><br>조합 당첨확률 <b>1 / 8,145,060</b></div><button class="utility-button" onclick="regenUtilityPick()">↻ 다시 추천</button></div>
+    <div class="sec-hd" style="margin-bottom:.7rem"><div class="sec-hd-lbl">인기 패턴 회피·분산 전략</div><div class="sec-hd-line"></div></div>
+    <div class="utility-intro">생일·연속수 등 인기 있을 것으로 가정한 패턴을 피하는 전략입니다. 구매자 선택 데이터로 검증되지 않은 휴리스틱이며, 공동당첨 위험이나 상금 증가를 수치로 추정한 결과가 아닙니다. 모든 조합의 1등 확률은 같습니다.</div>
+    <div class="utility-result"><div class="utility-balls">${pick.numbers.map(number=>mkBall(number,'sm')).join('')}</div><div class="utility-metric">패턴 점수 <b>${pick.crowdScore.toFixed(1)}</b><br>조합 1등 확률 <b>1 / 8,145,060</b></div><button class="utility-button" onclick="regenUtilityPick()">↻ 다시 추천</button></div>
     <div class="utility-intro" style="margin:1rem 0 .4rem">5장 구매 시 조합 간 중복을 줄인 분산 세트</div>
     <div class="utility-balls">${diversified.map((numbers,index)=>`<span style="display:inline-flex;align-items:center;gap:4px;margin-right:10px"><span class="utility-metric">${index+1}</span>${numbers.map(number=>mkBall(number,'xs')).join('')}</span>`).join('')}</div>`;
 }
-function regenUtilityPick(){renderUtilityPick();}
+function regenUtilityPick(){runSection('분산 추천',renderUtilityPick);}
 function gotoTab(name,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
@@ -750,6 +746,7 @@ async function loadBacktest(){
     const r = await fetch('backtest/backtest-summary.json',{cache:'no-cache'});
     if(!r.ok) throw new Error('summary 없음');
     const data = await r.json();
+    if(data.meta.evaluationVersion!==2) throw new Error('검증 방식 변경으로 재계산이 필요합니다');
     renderBacktestBadges(data);
     renderBacktestTab(data);
     renderPicks(data);
@@ -806,7 +803,7 @@ function renderBayesianBacktest(data){
       <thead><tr><th>모델</th><th>평균 hit</th><th>무작위 기대</th><th>로그손실</th><th>기준 로그손실</th><th>로그손실 skill</th></tr></thead>
       <tbody><tr><td>${s.name}</td><td class="num">${s.hitMean.toFixed(3)}</td><td class="num">${s.randomExpectedHit.toFixed(3)}</td><td class="num">${s.meanLogLoss.toFixed(4)}</td><td class="num">${s.baselineLogLoss.toFixed(4)}</td><td class="num ${skillClass}">${(s.logLossSkill*100).toFixed(2)}%</td></tr><tr><td>${s.joint.name}</td><td class="num">${s.joint.hitMean.toFixed(3)}</td><td class="num">${s.joint.randomExpectedHit.toFixed(3)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr></tbody>
     </table>
-    <div class="bt-honest" style="margin-top:1rem"><b>현재 결론</b> · 전체 워크포워드 평가 구간에서 두 모델 모두 무작위 기준보다 우수하다는 증거가 없습니다. 이 결과는 추천을 중단하기 위한 것이 아니라, 모델 확률을 과장하지 않기 위한 검증값입니다.</div>
+    <div class="bt-honest" style="margin-top:1rem"><b>해석</b> · 평균 적중 수와 로그손실은 기술통계입니다. 이 표만으로 예측 우위를 판정할 수 없습니다. ${m.evalEnd<N?'현재 DB보다 평가가 뒤처져 있습니다. 재계산이 필요합니다.':''}</div>
   `;
 }
 function renderStability(data){
@@ -815,7 +812,7 @@ function renderStability(data){
     추적 범위: <b>${m.weekRange[0]}회 ~ ${m.weekRange[1]}회 (${m.weeksTracked}주)</b> ·
     시드 규약: ${m.seedConvention} · monte sims: ${m.monteSims.toLocaleString()}<br>
     매주 새 회차가 데이터에 추가될 때 각 알고리즘이 어떻게 변하는지 직접 측정.
-    <b>모든 알고리즘이 사후분포 가중 샘플링</b>으로 매주 다양한 결과를 산출합니다.
+    알고리즘별 점수와 무작위 탐색으로 다양한 결과를 산출합니다.
   `;
   const algoOrder = ['cooccur','delta','hotcold','genetic','freq','monte'];
   let html = '';
@@ -848,21 +845,21 @@ function renderStability(data){
     </div>`;
   }
   html += `<div class="bt-honest" style="margin-top:1.2rem">
-    <b>해석</b> · 모든 알고리즘이 사후분포(score² 가중) 샘플링이라 매주 다양한 추천을 산출합니다.
-    각 알고리즘이 발견한 통계 신호(공출현/빈도/델타/hot+cold 점수)는 그대로 보존하면서,
-    그리디 단일 선택 대신 분포 샘플로 변경 — 베이지안 관점에서 정보 손실 없음.
-    delta는 시작번호 후보가 1~5의 5가지로 본질적 제한이 있어 변동 폭이 다른 알고리즘보다 작습니다.
+    <b>해석</b> · 추천번호의 변경 폭을 보여줍니다. 변경이 적다는 것이 예측력이 높다는 뜻은 아닙니다.
+    점수에 따른 가중 샘플링을 엄밀한 베이지안 사후분포로 해석할 수는 없습니다.
     <span style="color:var(--gold)">━━ 직전 주 대비 변경된 번호는 황금 테두리로 강조 ━━</span>
   </div>`;
   document.getElementById('btStabWrap').innerHTML = html;
 }
 function renderSweep(data){
   const m = data.meta;
+  if(m.selectionVersion!==2) throw new Error('설정 비교 결과를 새 방식으로 재계산해야 합니다.');
   document.getElementById('btSweepMeta').innerHTML = `
     train: <b>${m.trainRange[0]}~${m.trainRange[1]}회 (${m.trainRange[1]-m.trainRange[0]+1}회)</b> ·
     hold-out: <b>${m.holdoutRange[0]}~${m.holdoutRange[1]}회 (${m.holdoutRange[1]-m.holdoutRange[0]+1}회)</b> ·
-    overfit 임계 ±${m.overfitThresholdPct}% · 실행 ${(m.elapsedSec/60).toFixed(1)}분<br>
+    구간 차이 참고선 ±${m.overfitThresholdPct}% · 실행 ${(m.elapsedSec/60).toFixed(1)}분<br>
     <span style="color:var(--red)">⚠ ${m.note}</span>
+    ${m.holdoutRange[1]<N?`<br>현재 DB ${N}회보다 설정 비교 결과가 뒤처져 있습니다.`:''}
   `;
   let html = '';
   for(const algoId of Object.keys(data.algos)){
@@ -886,16 +883,16 @@ function renderSweep(data){
       </div>
       <table class="bt-table">
         <thead><tr>
-          <th>파라미터</th><th>train hit</th><th>hold-out hit</th><th>Δ%</th><th>overfit</th>
+          <th>파라미터</th><th>선택 구간 hit</th><th>평가 구간 hit</th><th>Δ%</th><th>차이 주의</th>
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
   }
   html += `<div class="bt-honest" style="margin-top:1.5rem">
-    <b>주의</b> · ★는 hold-out hit이 가장 높은 조합이지만 124회 표본의 우연일 가능성이 높습니다.
-    어떤 알고리즘도 hold-out에서 통계적으로 의미 있는 파라미터 우위가 없습니다 (대부분 ±10% 안팎 IID 노이즈).
-    이 결과는 <b>자동 채택되지 않으며</b> 참고용입니다 — 프로덕션 파라미터 변경은 명시적 검토 후에만.
+    <b>주의</b> · ★는 선택 구간 성적으로 고른 설정입니다. 평가 구간 ${m.holdoutRange[1]-m.holdoutRange[0]+1}회는 설정 순위에 사용하지 않습니다.
+    이전에 확인한 1241회까지는 회고 평가이며 완전히 새로운 검증 구간이 아닙니다. 1242회부터 선택된 설정을 고정해 추적해야 합니다.
+    구간 차이 10%는 통계적 과적합 검정이 아닙니다. 결과는 자동 채택되지 않습니다.
   </div>`;
   document.getElementById('btSweepWrap').innerHTML = html;
 }
@@ -962,26 +959,26 @@ function renderPicks(data){
       lbl: '하나만 고른다면',
       gold: true,
       name: top.name,
-      score: `평균 hit ${top.hitMean.toFixed(3)} (무작위 ${refHit.toFixed(3)}, +${((top.hitMean/refHit-1)*100).toFixed(1)}%)`,
-      why: `<b>평균 hit 1위</b>. 결정론적 알고리즘이라 매번 같은 번호 생성. 다만 표준편차 ${top.hitStd.toFixed(2)}로 우연 범위 안.`,
+      score: `평균 hit ${top.hitMean.toFixed(3)} (무작위 ${refHit.toFixed(3)}, ${top.hitMean>=refHit?'+':''}${((top.hitMean/refHit-1)*100).toFixed(1)}%)`,
+      why: `<b>관측 평균 hit 1위</b>. 확률적 추천이므로 재생성 시 번호가 바뀔 수 있습니다. 이 순위만으로 다음 회차의 우위를 판단할 수 없습니다.`,
     },
     {
       lbl: '분산 안정 우선',
       name: stable.name,
-      score: `표준편차 ${stable.hitStd.toFixed(3)} (가장 낮음) · 평균 hit ${stable.hitMean.toFixed(3)}`,
-      why: `<b>변동성이 가장 작음</b>. 매주 결과가 평균에서 크게 벗어나지 않음. 큰 hit도 큰 miss도 적은 보수적 픽.`,
+      score: `적중 수 표준편차 ${stable.hitStd.toFixed(3)} · 평균 hit ${stable.hitMean.toFixed(3)}`,
+      why: `${data.meta.hitStdDefinition==='individual-ticket'?'개별 추천 적중 수':'회차별 반복 평균 적중 수'}의 변동입니다. 구매 위험이나 미래 수익의 안정성을 보장하지 않습니다.`,
     },
     {
       lbl: '의견 분산',
       name: '6개 알고리즘 앙상블',
       score: '6개 추천을 투표 집계 (동점 시 빈도 우선)',
-      why: `<b>홈탭 상단의 황금 번호</b>. 어차피 알고리즘 간 통계적 차이가 없으니 평균이 합리. 한 알고리즘의 노이즈에 의존하지 않음.`,
+      why: `<b>홈탭 상단의 황금 번호</b>. 여러 추천을 합친 선택 방식입니다. 앙상블 자체의 예측 우위는 별도 검증되지 않았습니다.`,
     },
     {
       lbl: '가장 정직하게',
       name: '무작위 6개',
       score: 'IID 가정에서 위와 동등한 EV',
-      why: `<b>로또는 IID</b>. 백테스트가 위 모든 알고리즘이 무작위와 통계적으로 동일함을 입증. 시뮬레이터 탭의 🎲 버튼으로 즉시 생성 가능.`,
+      why: `공정한 추첨에서 모든 조합의 1등 확률은 같습니다. 시뮬레이터 탭의 🎲 버튼으로 생성할 수 있습니다.`,
     },
   ];
   document.getElementById('btPickWrap').innerHTML = `
@@ -1003,7 +1000,10 @@ function renderBacktestTab(data){
     평가 회차: <b>${m.evalStart}~${m.evalEnd}회</b> (총 ${m.evalEnd-m.evalStart+1}회) ·
     rand 반복: <b>${m.randRuns}</b> · monte 시뮬: <b>${m.monteSims.toLocaleString()}</b> ·
     실행 시간: <b>${(m.elapsedSec/60).toFixed(1)}분</b><br>
-    생성: ${new Date(m.generatedAt).toLocaleString('ko-KR')}
+    생성: ${new Date(m.generatedAt).toLocaleString('ko-KR')}<br>
+    ${m.evalEnd<N?`현재 DB ${N}회 / 평가 ${m.evalEnd}회 — 백테스트 재계산이 필요합니다.`:'현재 DB까지 평가 완료'}
+    ${m.monteSims!==100000?' · 몬테카를로 검증은 화면의 10만 회 탐색과 다른 탐색 횟수를 사용합니다.':''}
+    <br>${m.correctionNote||''} · 표준편차: ${m.hitStdDefinition==='individual-ticket'?'개별 추천':'회차별 반복 평균'} 기준
   `;
   const algos = ALGOS.map(a=>data.algos[a.id]).filter(Boolean).sort((a,b)=>a.rankByBSS-b.rankByBSS);
   const refHit = (6*6/45).toFixed(3);
@@ -1030,7 +1030,7 @@ function renderBacktestTab(data){
       <tbody>${rows}</tbody>
     </table>
     <div class="bt-meta" style="margin-top:1rem;font-size:10.5px">
-      무작위 기대 hit = 6×6/45 = <b>${refHit}</b> · Bonferroni 보정 임계 α' = <b>0.00833</b> · n=10,000 부트스트랩
+      무작위 기대 hit = 6×6/45 = <b>${refHit}</b> · Bonferroni 보정 p &lt; 0.05 및 BSS &gt; 0일 때 ✓ · 회차 단위 부트스트랩 10,000회
     </div>
   `;
 }
@@ -1151,7 +1151,19 @@ window.runSim = runSim;
 window.simRandom = simRandom;
 window.regenUtilityPick = regenUtilityPick;
 
-buildGrid(); buildSimAlgoChips(); initStats(); setTimeout(regenAll,80); loadBacktest();
+function runSection(name,fn){
+  try{fn();}catch(error){
+    console.error(name,error);
+    let status=document.getElementById('appStatus');
+    if(!status){status=document.createElement('div');status.id='appStatus';status.setAttribute('role','alert');document.getElementById('pane-home').prepend(status);}
+    status.textContent=`${name} 표시 중 문제가 발생했습니다. 새로고침해 주세요. 다른 추천은 계속 사용할 수 있습니다.`;
+  }
+}
+runSection('추천 카드',buildGrid);
+runSection('시뮬레이터',buildSimAlgoChips);
+runSection('통계',initStats);
+runSection('추천 생성',regenAll);
+loadBacktest();
 </script>
 </body>
 </html>

@@ -7,22 +7,18 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const HTML = resolve(__dirname, "..", "index.html");
 
-export function loadDraws() {
-  const text = readFileSync(HTML, "utf-8");
+export function loadDraws(path = HTML) {
+  return parseDraws(readFileSync(path, "utf-8"));
+}
+
+export function parseDraws(text) {
   const m = text.match(/const RAW\s*=\s*\[(.*?)\];/s);
   if (!m) throw new Error("RAW array not found in index.html");
 
-  const draws = [];
-  const re = /\[(\d+),"(\d{4}-\d{2}-\d{2})",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\]/g;
-  let row;
-  while ((row = re.exec(m[1])) !== null) {
-    draws.push({
-      no: +row[1],
-      date: row[2],
-      nums: [+row[3], +row[4], +row[5], +row[6], +row[7], +row[8]],
-      bonus: +row[9],
-    });
-  }
-  draws.sort((a, b) => a.no - b.no);
-  return draws;
+  const rows = JSON.parse(`[${m[1]}]`);
+  if (!Array.isArray(rows) || !rows.length) throw new Error('당첨 데이터가 비어 있습니다.');
+  return rows.map(row => {
+    if (!Array.isArray(row) || row.length !== 9) throw new Error('각 회차는 정확히 9개 값이어야 합니다.');
+    return {no: row[0], date: row[1], nums: row.slice(2, 8), bonus: row[8]};
+  });
 }

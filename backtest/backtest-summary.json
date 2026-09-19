@@ -8,7 +8,12 @@
     "randRuns": 100,
     "monteSims": 10000,
     "elapsedSec": 4938.89,
-    "detailFile": "backtest-detail.json"
+    "detailFile": "backtest-detail.json",
+    "evaluationVersion": 2,
+    "significanceMethod": "paired-centered-bootstrap-one-sided",
+    "inferenceCorrectedAt": "2026-09-19T08:46:08.203Z",
+    "hitStdDefinition": "round-mean",
+    "correctionNote": "기존 적중 수·BSS·CI 보존. BSS가 모두 음수이므로 개선에 대한 단측 p=1로 교정. 예측을 재실행한 결과는 아닙니다."
   },
   "algos": {
     "freq": {
@@ -34,11 +39,11 @@
         -0.452138,
         -0.426509
       ],
-      "pValue": 0,
-      "nullSimCount": 10000,
+      "pValue": 1,
+      "nullSimCount": 0,
       "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 4
     },
@@ -65,11 +70,11 @@
         -0.171015,
         -0.154269
       ],
-      "pValue": 0,
-      "nullSimCount": 10000,
+      "pValue": 1,
+      "nullSimCount": 0,
       "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 2
     },
@@ -96,11 +101,11 @@
         -0.283258,
         -0.26046
       ],
-      "pValue": 0,
-      "nullSimCount": 10000,
+      "pValue": 1,
+      "nullSimCount": 0,
       "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 3
     },
@@ -127,11 +132,11 @@
         -0.088865,
         -0.077369
       ],
-      "pValue": 0,
-      "nullSimCount": 10000,
+      "pValue": 1,
+      "nullSimCount": 0,
       "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 1
     },
@@ -158,11 +163,11 @@
         -0.623897,
         -0.593175
       ],
-      "pValue": 0,
-      "nullSimCount": 10000,
+      "pValue": 1,
+      "nullSimCount": 0,
       "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 6
     },
@@ -189,11 +194,11 @@
         -0.462643,
         -0.436839
       ],
-      "pValue": 0,
-      "nullSimCount": 10000,
+      "pValue": 1,
+      "nullSimCount": 0,
       "randRuns": 100,
-      "pValueBonferroni": 0,
-      "isSignificant": true,
+      "pValueBonferroni": 1,
+      "isSignificant": false,
       "bonferroniAlpha": 0.008333,
       "rankByBSS": 5
     }

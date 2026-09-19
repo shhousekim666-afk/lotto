@@ -16,7 +16,7 @@ const OVERFIT_PCT = 10; // hold-out hit이 train 대비 ±10% 초과시 overfitt
 
 // 알고리즘별 paramGrid (data-analyst 권장)
 const GRIDS = {
-  freq:    [{ topK: 5 }, { topK: 10 }, { topK: 15 }, { topK: 20 }],
+  freq:    [{ topK: 6 }, { topK: 10 }, { topK: 12 }, { topK: 15 }, { topK: 20 }],
   monte:   [{ sims: 1000 }, { sims: 5000 }, { sims: 10000 }, { sims: 30000 }],
   hotcold: [{ window: 10 }, { window: 20 }, { window: 30 }, { window: 50 }, { window: 100 }],
   genetic: (() => {
@@ -86,8 +86,8 @@ function main() {
         `  ${paramKey(opts)}: train=${train.mean}, hold=${hold.mean}, Δ${deltaPct.toFixed(1)}% ${overfit ? "⚠" : "·"} (${dt}s)\n`,
       );
     }
-    // 정렬: hold-out hit 우선
-    trials.sort((a, b) => b.holdoutMean - a.holdoutMean);
+    // 평가 구간의 결과를 설정 선택에 사용하지 않는다.
+    trials.sort((a, b) => b.trainMean - a.trainMean || a.paramKey.localeCompare(b.paramKey));
     // 현재 기본값 찾기
     const defaultsMap = {
       freq: { topK: 12 },
@@ -111,7 +111,10 @@ function main() {
       holdoutRange: [HOLD_START, HOLD_END],
       overfitThresholdPct: OVERFIT_PCT,
       elapsedSec: +elapsed.toFixed(2),
-      note: "각 조합 회차당 1 run (시드 고정). 알고리즘별 최적은 hold-out 기준. 자동 채택 X, 참고용.",
+      selectionVersion: 2,
+      selectionMetric: 'trainMean',
+      prospectiveStart: 1242,
+      note: "301~1100회 성적으로만 설정을 선택합니다. 1101~1241회는 이전에 확인한 회고 평가이며, 1242회부터 미관측 평가가 시작됩니다. 10% 차이 표시는 참고값이며 과적합 검정이 아닙니다. 자동 채택하지 않습니다.",
     },
     algos: results,
   };

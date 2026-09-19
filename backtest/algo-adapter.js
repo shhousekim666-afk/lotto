@@ -74,6 +74,7 @@ function wSample(weights, rng) {
 export function algoFreq(ctx, rng, opts = {}) {
   const { freq } = ctx;
   const topK = opts.topK ?? 12;
+  if (!Number.isInteger(topK) || topK < 6 || topK > 45) throw new Error('빈도 후보 수는 6~45여야 합니다.');
   const topN = Array.from({ length: 45 }, (_, i) => i + 1)
     .sort((a, b) => freq[b] - freq[a])
     .slice(0, topK);
