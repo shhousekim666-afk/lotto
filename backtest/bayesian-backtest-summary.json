@@ -1,20 +1,20 @@
 {
   "meta": {
-    "generatedAt": "2026-10-24T13:25:17.731Z",
-    "totalDraws": 1247,
+    "generatedAt": "2026-10-31T13:56:01.387Z",
+    "totalDraws": 1248,
     "evalStart": 301,
-    "evalEnd": 1247,
-    "evalRounds": 947,
+    "evalEnd": 1248,
+    "evalRounds": 948,
     "priorStrength": 45
   },
   "model": {
     "name": "베이지안 빈도 모델",
-    "hitMean": 0.7761,
+    "hitMean": 0.7774,
     "randomExpectedHit": 0.8,
     "hitDistribution": [
       399,
       391,
-      129,
+      130,
       26,
       2,
       0,
@@ -22,20 +22,20 @@
     ],
     "joint": {
       "name": "빈도+공출현 공동분포 모델",
-      "hitMean": 0.7751,
+      "hitMean": 0.7764,
       "randomExpectedHit": 0.8,
       "hitDistribution": [
         392,
         397,
-        138,
+        139,
         19,
         1,
         0,
         0
       ]
     },
-    "meanLogLoss": 0.393327,
+    "meanLogLoss": 0.393322,
     "baselineLogLoss": 0.392674,
-    "logLossSkill": -0.001663
+    "logLossSkill": -0.001648
   }
 }
