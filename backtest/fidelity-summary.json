@@ -1,41 +1,41 @@
 {
   "meta": {
-    "generatedAt": "2026-10-31T13:50:10.534Z"
+    "generatedAt": "2026-11-07T14:34:07.596Z"
   },
   "algos": {
     "freq": {
       "name": "빈도 분석",
-      "evalCount": 94800,
-      "mean": 1.2115,
-      "std": 0.1767,
-      "median": 1.2058,
+      "evalCount": 94900,
+      "mean": 1.2114,
+      "std": 0.1766,
+      "median": 1.2056,
       "p5": 0.9363,
-      "p95": 1.5246,
+      "p95": 1.5245,
       "baseline": 0
     },
     "cooccur": {
       "name": "공출현 행렬",
-      "evalCount": 94800,
-      "mean": 1.3448,
+      "evalCount": 94900,
+      "mean": 1.3447,
       "std": 0.1038,
-      "median": 1.3183,
+      "median": 1.3181,
       "p5": 1.2131,
-      "p95": 1.5368,
+      "p95": 1.5367,
       "baseline": 1
     },
     "monte": {
       "name": "몬테카를로",
-      "evalCount": 94800,
-      "mean": 1.3783,
+      "evalCount": 94900,
+      "mean": 1.3781,
       "std": 0.1039,
-      "median": 1.3587,
-      "p5": 1.2534,
-      "p95": 1.5626,
+      "median": 1.3584,
+      "p5": 1.2533,
+      "p95": 1.5625,
       "baseline": 1
     },
     "delta": {
       "name": "델타 수열",
-      "evalCount": 94800,
+      "evalCount": 94900,
       "mean": 0.7564,
       "std": 0.013,
       "median": 0.7541,
@@ -45,7 +45,7 @@
     },
     "genetic": {
       "name": "유전 알고리즘",
-      "evalCount": 94800,
+      "evalCount": 94900,
       "mean": 0.9927,
       "std": 0.0221,
       "median": 1,
@@ -55,8 +55,8 @@
     },
     "hotcold": {
       "name": "핫/콜드",
-      "evalCount": 94800,
-      "mean": 1.3631,
+      "evalCount": 94900,
+      "mean": 1.363,
       "std": 0.0822,
       "median": 1.3581,
       "p5": 1.2349,

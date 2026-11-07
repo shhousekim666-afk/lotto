@@ -1,16 +1,16 @@
 {
   "meta": {
-    "generatedAt": "2026-10-31T13:55:51.243Z",
+    "generatedAt": "2026-11-07T14:39:51.244Z",
     "trainRange": [
       301,
       1100
     ],
     "holdoutRange": [
       1101,
-      1248
+      1249
     ],
     "overfitThresholdPct": 10,
-    "elapsedSec": 326.73,
+    "elapsedSec": 329.81,
     "selectionVersion": 2,
     "selectionMetric": "trainMean",
     "prospectiveStart": 1242,
@@ -27,9 +27,9 @@
           "paramKey": "topK=12",
           "trainMean": 0.7963,
           "trainStd": 0.7967,
-          "holdoutMean": 0.7635,
-          "holdoutStd": 0.8,
-          "deltaPct": 4.12,
+          "holdoutMean": 0.7584,
+          "holdoutStd": 0.7998,
+          "deltaPct": 4.76,
           "overfit": false
         },
         {
@@ -39,9 +39,9 @@
           "paramKey": "topK=20",
           "trainMean": 0.79,
           "trainStd": 0.7927,
-          "holdoutMean": 0.7635,
-          "holdoutStd": 0.7293,
-          "deltaPct": 3.35,
+          "holdoutMean": 0.7584,
+          "holdoutStd": 0.7295,
+          "deltaPct": 4,
           "overfit": false
         },
         {
@@ -51,9 +51,9 @@
           "paramKey": "topK=15",
           "trainMean": 0.7863,
           "trainStd": 0.7988,
-          "holdoutMean": 0.8581,
-          "holdoutStd": 0.8622,
-          "deltaPct": -9.13,
+          "holdoutMean": 0.8523,
+          "holdoutStd": 0.8621,
+          "deltaPct": -8.39,
           "overfit": false
         },
         {
@@ -63,9 +63,9 @@
           "paramKey": "topK=6",
           "trainMean": 0.775,
           "trainStd": 0.7933,
-          "holdoutMean": 0.7905,
-          "holdoutStd": 0.8241,
-          "deltaPct": -2,
+          "holdoutMean": 0.7919,
+          "holdoutStd": 0.8215,
+          "deltaPct": -2.18,
           "overfit": false
         },
         {
@@ -75,9 +75,9 @@
           "paramKey": "topK=10",
           "trainMean": 0.7688,
           "trainStd": 0.7923,
-          "holdoutMean": 0.7973,
-          "holdoutStd": 0.7795,
-          "deltaPct": -3.71,
+          "holdoutMean": 0.7919,
+          "holdoutStd": 0.7796,
+          "deltaPct": -3,
           "overfit": false
         }
       ],
@@ -88,9 +88,9 @@
         "paramKey": "topK=12",
         "trainMean": 0.7963,
         "trainStd": 0.7967,
-        "holdoutMean": 0.7635,
-        "holdoutStd": 0.8,
-        "deltaPct": 4.12,
+        "holdoutMean": 0.7584,
+        "holdoutStd": 0.7998,
+        "deltaPct": 4.76,
         "overfit": false
       },
       "defaults": {
@@ -107,9 +107,9 @@
           "paramKey": "sims=1000",
           "trainMean": 0.79,
           "trainStd": 0.7719,
-          "holdoutMean": 0.8378,
-          "holdoutStd": 0.8781,
-          "deltaPct": -6.05,
+          "holdoutMean": 0.8322,
+          "holdoutStd": 0.8778,
+          "deltaPct": -5.34,
           "overfit": false
         },
         {
@@ -119,9 +119,9 @@
           "paramKey": "sims=10000",
           "trainMean": 0.79,
           "trainStd": 0.7911,
-          "holdoutMean": 0.7297,
-          "holdoutStd": 0.7497,
-          "deltaPct": 7.63,
+          "holdoutMean": 0.7315,
+          "holdoutStd": 0.7475,
+          "deltaPct": 7.41,
           "overfit": false
         },
         {
@@ -131,9 +131,9 @@
           "paramKey": "sims=5000",
           "trainMean": 0.78,
           "trainStd": 0.7772,
-          "holdoutMean": 0.7905,
-          "holdoutStd": 0.8241,
-          "deltaPct": -1.35,
+          "holdoutMean": 0.7919,
+          "holdoutStd": 0.8215,
+          "deltaPct": -1.53,
           "overfit": false
         },
         {
@@ -143,9 +143,9 @@
           "paramKey": "sims=30000",
           "trainMean": 0.7725,
           "trainStd": 0.7604,
-          "holdoutMean": 0.7838,
-          "holdoutStd": 0.7671,
-          "deltaPct": -1.46,
+          "holdoutMean": 0.7852,
+          "holdoutStd": 0.7647,
+          "deltaPct": -1.64,
           "overfit": false
         }
       ],
@@ -156,9 +156,9 @@
         "paramKey": "sims=1000",
         "trainMean": 0.79,
         "trainStd": 0.7719,
-        "holdoutMean": 0.8378,
-        "holdoutStd": 0.8781,
-        "deltaPct": -6.05,
+        "holdoutMean": 0.8322,
+        "holdoutStd": 0.8778,
+        "deltaPct": -5.34,
         "overfit": false
       },
       "defaults": {
@@ -175,9 +175,9 @@
           "paramKey": "window=50",
           "trainMean": 0.8488,
           "trainStd": 0.8037,
-          "holdoutMean": 0.8108,
-          "holdoutStd": 0.7565,
-          "deltaPct": 4.48,
+          "holdoutMean": 0.8121,
+          "holdoutStd": 0.7541,
+          "deltaPct": 4.32,
           "overfit": false
         },
         {
@@ -187,9 +187,9 @@
           "paramKey": "window=30",
           "trainMean": 0.835,
           "trainStd": 0.7955,
-          "holdoutMean": 0.7162,
-          "holdoutStd": 0.6782,
-          "deltaPct": 14.23,
+          "holdoutMean": 0.7181,
+          "holdoutStd": 0.6764,
+          "deltaPct": 14,
           "overfit": true
         },
         {
@@ -199,9 +199,9 @@
           "paramKey": "window=10",
           "trainMean": 0.815,
           "trainStd": 0.7702,
-          "holdoutMean": 0.7838,
-          "holdoutStd": 0.8015,
-          "deltaPct": 3.83,
+          "holdoutMean": 0.7852,
+          "holdoutStd": 0.799,
+          "deltaPct": 3.66,
           "overfit": false
         },
         {
@@ -211,9 +211,9 @@
           "paramKey": "window=20",
           "trainMean": 0.805,
           "trainStd": 0.8028,
-          "holdoutMean": 0.7568,
-          "holdoutStd": 0.7035,
-          "deltaPct": 5.99,
+          "holdoutMean": 0.7584,
+          "holdoutStd": 0.7014,
+          "deltaPct": 5.79,
           "overfit": false
         },
         {
@@ -223,9 +223,9 @@
           "paramKey": "window=100",
           "trainMean": 0.7738,
           "trainStd": 0.7859,
-          "holdoutMean": 0.8041,
-          "holdoutStd": 0.7855,
-          "deltaPct": -3.92,
+          "holdoutMean": 0.8054,
+          "holdoutStd": 0.783,
+          "deltaPct": -4.08,
           "overfit": false
         }
       ],
@@ -236,9 +236,9 @@
         "paramKey": "window=50",
         "trainMean": 0.8488,
         "trainStd": 0.8037,
-        "holdoutMean": 0.8108,
-        "holdoutStd": 0.7565,
-        "deltaPct": 4.48,
+        "holdoutMean": 0.8121,
+        "holdoutStd": 0.7541,
+        "deltaPct": 4.32,
         "overfit": false
       },
       "defaults": {
@@ -256,9 +256,9 @@
           "paramKey": "gens=100/popSize=100",
           "trainMean": 0.8037,
           "trainStd": 0.7876,
-          "holdoutMean": 0.7162,
-          "holdoutStd": 0.7356,
-          "deltaPct": 10.89,
+          "holdoutMean": 0.7181,
+          "holdoutStd": 0.7335,
+          "deltaPct": 10.65,
           "overfit": true
         },
         {
@@ -269,9 +269,9 @@
           "paramKey": "gens=200/popSize=100",
           "trainMean": 0.7963,
           "trainStd": 0.7598,
-          "holdoutMean": 0.8784,
-          "holdoutStd": 0.7703,
-          "deltaPct": -10.31,
+          "holdoutMean": 0.8792,
+          "holdoutStd": 0.7677,
+          "deltaPct": -10.41,
           "overfit": true
         },
         {
@@ -282,9 +282,9 @@
           "paramKey": "gens=100/popSize=200",
           "trainMean": 0.78,
           "trainStd": 0.79,
-          "holdoutMean": 0.8784,
-          "holdoutStd": 0.8129,
-          "deltaPct": -12.62,
+          "holdoutMean": 0.8859,
+          "holdoutStd": 0.8154,
+          "deltaPct": -13.58,
           "overfit": true
         },
         {
@@ -295,9 +295,9 @@
           "paramKey": "gens=50/popSize=50",
           "trainMean": 0.78,
           "trainStd": 0.7772,
-          "holdoutMean": 0.7635,
-          "holdoutStd": 0.7566,
-          "deltaPct": 2.12,
+          "holdoutMean": 0.7651,
+          "holdoutStd": 0.7543,
+          "deltaPct": 1.91,
           "overfit": false
         },
         {
@@ -308,9 +308,9 @@
           "paramKey": "gens=200/popSize=50",
           "trainMean": 0.7712,
           "trainStd": 0.7915,
-          "holdoutMean": 0.777,
-          "holdoutStd": 0.8039,
-          "deltaPct": -0.75,
+          "holdoutMean": 0.7718,
+          "holdoutStd": 0.8037,
+          "deltaPct": -0.08,
           "overfit": false
         },
         {
@@ -321,9 +321,9 @@
           "paramKey": "gens=50/popSize=100",
           "trainMean": 0.77,
           "trainStd": 0.7711,
-          "holdoutMean": 0.8108,
-          "holdoutStd": 0.8083,
-          "deltaPct": -5.3,
+          "holdoutMean": 0.8121,
+          "holdoutStd": 0.8058,
+          "deltaPct": -5.47,
           "overfit": false
         },
         {
@@ -334,9 +334,9 @@
           "paramKey": "gens=50/popSize=200",
           "trainMean": 0.7675,
           "trainStd": 0.749,
-          "holdoutMean": 0.7635,
-          "holdoutStd": 0.7743,
-          "deltaPct": 0.52,
+          "holdoutMean": 0.7651,
+          "holdoutStd": 0.7719,
+          "deltaPct": 0.31,
           "overfit": false
         },
         {
@@ -347,9 +347,9 @@
           "paramKey": "gens=200/popSize=200",
           "trainMean": 0.7538,
           "trainStd": 0.7701,
-          "holdoutMean": 0.8446,
-          "holdoutStd": 0.7597,
-          "deltaPct": -12.05,
+          "holdoutMean": 0.8456,
+          "holdoutStd": 0.7573,
+          "deltaPct": -12.18,
           "overfit": true
         },
         {
@@ -360,9 +360,9 @@
           "paramKey": "gens=100/popSize=50",
           "trainMean": 0.7438,
           "trainStd": 0.7487,
-          "holdoutMean": 0.7905,
-          "holdoutStd": 0.8158,
-          "deltaPct": -6.28,
+          "holdoutMean": 0.7919,
+          "holdoutStd": 0.8133,
+          "deltaPct": -6.47,
           "overfit": false
         }
       ],
@@ -374,9 +374,9 @@
         "paramKey": "gens=100/popSize=100",
         "trainMean": 0.8037,
         "trainStd": 0.7876,
-        "holdoutMean": 0.7162,
-        "holdoutStd": 0.7356,
-        "deltaPct": 10.89,
+        "holdoutMean": 0.7181,
+        "holdoutStd": 0.7335,
+        "deltaPct": 10.65,
         "overfit": true
       },
       "defaults": {

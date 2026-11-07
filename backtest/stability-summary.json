@@ -1,70 +1,16 @@
 {
   "meta": {
-    "generatedAt": "2026-10-31T13:50:24.461Z",
+    "generatedAt": "2026-11-07T14:34:21.379Z",
     "weekRange": [
-      1239,
-      1248
+      1240,
+      1249
     ],
     "weeksTracked": 10,
     "monteSims": 100000,
     "seedConvention": "round=current_max, runIdx=0",
-    "elapsedSec": 3.9
+    "elapsedSec": 3.92
   },
   "weeks": [
-    {
-      "round": 1239,
-      "date": "2026-08-29",
-      "predictions": {
-        "freq": [
-          13,
-          27,
-          34,
-          37,
-          38,
-          45
-        ],
-        "cooccur": [
-          7,
-          12,
-          13,
-          24,
-          29,
-          33
-        ],
-        "monte": [
-          1,
-          3,
-          12,
-          15,
-          24,
-          34
-        ],
-        "delta": [
-          1,
-          7,
-          14,
-          20,
-          27,
-          34
-        ],
-        "genetic": [
-          13,
-          18,
-          27,
-          33,
-          34,
-          36
-        ],
-        "hotcold": [
-          13,
-          15,
-          16,
-          18,
-          28,
-          36
-        ]
-      }
-    },
     {
       "round": 1240,
       "date": "2026-09-05",
@@ -550,6 +496,60 @@
           42
         ]
       }
+    },
+    {
+      "round": 1249,
+      "date": "2026-11-07",
+      "predictions": {
+        "freq": [
+          12,
+          16,
+          18,
+          27,
+          40,
+          45
+        ],
+        "cooccur": [
+          3,
+          20,
+          24,
+          27,
+          35,
+          45
+        ],
+        "monte": [
+          7,
+          12,
+          15,
+          19,
+          24,
+          34
+        ],
+        "delta": [
+          7,
+          13,
+          20,
+          26,
+          33,
+          40
+        ],
+        "genetic": [
+          11,
+          12,
+          13,
+          18,
+          27,
+          34
+        ],
+        "hotcold": [
+          13,
+          15,
+          16,
+          18,
+          28,
+          31
+        ]
+      }
     }
   ],
   "stats": {
@@ -557,10 +557,10 @@
       "name": "빈도 분석",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 3,
+      "avgChangePerWeek": 3.11,
       "maxChange": 5,
       "changedWeeks": 9,
-      "avgJaccard": 0.343,
+      "avgJaccard": 0.329,
       "firstVsLastOverlap": 3,
       "firstVsLastJaccard": 0.333
     },
@@ -568,23 +568,23 @@
       "name": "공출현 행렬",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 4.89,
+      "avgChangePerWeek": 4.78,
       "maxChange": 6,
       "changedWeeks": 9,
-      "avgJaccard": 0.109,
-      "firstVsLastOverlap": 0,
-      "firstVsLastJaccard": 0
+      "avgJaccard": 0.119,
+      "firstVsLastOverlap": 3,
+      "firstVsLastJaccard": 0.333
     },
     "monte": {
       "name": "몬테카를로",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 3.44,
+      "avgChangePerWeek": 3.56,
       "maxChange": 5,
       "changedWeeks": 9,
-      "avgJaccard": 0.293,
-      "firstVsLastOverlap": 3,
-      "firstVsLastJaccard": 0.333
+      "avgJaccard": 0.275,
+      "firstVsLastOverlap": 2,
+      "firstVsLastJaccard": 0.2
     },
     "delta": {
       "name": "델타 수열",
@@ -601,10 +601,10 @@
       "name": "유전 알고리즘",
       "det": false,
       "transitions": 9,
-      "avgChangePerWeek": 1.33,
+      "avgChangePerWeek": 1.44,
       "maxChange": 2,
       "changedWeeks": 9,
-      "avgJaccard": 0.643,
+      "avgJaccard": 0.619,
       "firstVsLastOverlap": 4,
       "firstVsLastJaccard": 0.5
     },
@@ -616,8 +616,8 @@
       "maxChange": 4,
       "changedWeeks": 9,
       "avgJaccard": 0.307,
-      "firstVsLastOverlap": 2,
-      "firstVsLastJaccard": 0.2
+      "firstVsLastOverlap": 4,
+      "firstVsLastJaccard": 0.5
     }
   }
 }
